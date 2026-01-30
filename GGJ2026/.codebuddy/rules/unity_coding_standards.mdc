@@ -133,6 +133,35 @@ public class GameManager : MonoBehaviour
 - 使用`Debug.Assert`进行运行时检查
 - 在发布版本中自动禁用
 
+## Unity对象安全使用规范
+
+### 1. 避免使用空值传播操作符
+- **禁止**在Unity对象上使用空值传播操作符（?.）
+- **原因**：Unity对象被销毁后可能返回null，但空值传播操作符会隐藏潜在的逻辑错误
+- **正确做法**：使用显式的null检查
+
+```csharp
+// 错误：在Unity对象上使用空值传播
+UIManager.Instance?.Back();
+
+// 正确：显式null检查
+if (UIManager.Instance != null)
+{
+    UIManager.Instance.Back();
+}
+
+// 或者使用Unity的Object.ReferenceEquals检查
+if (!ReferenceEquals(UIManager.Instance, null))
+{
+    UIManager.Instance.Back();
+}
+```
+
+### 2. Unity对象null检查最佳实践
+- 使用`Object.ReferenceEquals(obj, null)`进行精确的null检查
+- 避免使用`obj == null`，因为Unity重写了相等运算符
+- 对于可能被销毁的Unity对象，使用显式检查确保安全
+
 ## 平台特定代码
 
 ### 1. 平台检测
