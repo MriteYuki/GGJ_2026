@@ -1,0 +1,252 @@
+---
+description: 
+alwaysApply: true
+enabled: true
+updatedAt: 2026-01-30T12:43:16.476Z
+provider: 
+---
+
+# Unity C#代码书写规范
+
+基于Unity官方编程指南和最佳实践，专门针对Unity引擎开发的C#代码规范。
+
+## Unity特定命名约定
+
+### 1. MonoBehaviour类命名
+- 使用描述性名称，避免使用"Script"后缀
+- 示例：`PlayerMovement`而非`PlayerMovementScript`
+
+### 2. 事件方法命名
+- 使用On前缀表示事件响应方法
+- 示例：`OnCollisionEnter`, `OnTriggerExit`
+
+### 3. 组件字段命名
+- 使用组件类型作为后缀
+- 示例：`playerRigidbody`, `cameraTransform`
+
+## Unity性能优化规范
+
+### 1. 避免每帧操作
+- 避免在Update中调用`FindObjectOfType`, `GetComponent`
+- 在Start/Awake中缓存组件引用
+
+### 2. 对象池使用
+- 频繁创建销毁的对象使用对象池
+- 避免在Update中实例化对象
+
+### 3. 协程使用
+- 使用`yield return null`而非`yield return 0`
+- 避免在协程中创建大量垃圾
+
+## MonoBehaviour生命周期规范
+
+### 1. 方法执行顺序
+```csharp
+void Awake()      // 初始化，在Start之前
+void Start()      // 第一次Update之前
+void Update()     // 每帧调用
+void FixedUpdate()// 物理更新
+void LateUpdate() // 在Update之后
+void OnDestroy()  // 对象销毁时
+```
+
+### 2. 初始化最佳实践
+- 在Awake中设置引用和初始化状态
+- 在Start中处理依赖关系
+
+## 序列化和Inspector规范
+
+### 1. 序列化字段
+- 使用`[SerializeField]`暴露私有字段到Inspector
+- 公共字段仅在必要时暴露
+
+### 2. Inspector组织
+- 使用`[Header("分组标题")]`组织Inspector
+- 使用`[Tooltip("说明文字")]`添加工具提示
+- 使用`[Range(min, max)]`限制数值范围
+
+### 3. 属性使用
+- 避免在属性中执行复杂逻辑
+- 使用`[HideInInspector]`隐藏不需要序列化的属性
+
+## Unity特定代码模式
+
+### 1. 单例模式（谨慎使用）
+```csharp
+public class GameManager : MonoBehaviour
+{
+    public static GameManager Instance { get; private set; }
+    
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+}
+```
+
+### 2. 事件系统
+- 使用UnityEvent或C#事件实现松耦合
+- 避免直接引用其他GameObject
+
+### 3. 组件通信
+- 使用`GetComponent<T>()`获取组件
+- 使用`SendMessage`或事件系统进行通信
+
+## 物理和碰撞规范
+
+### 1. 物理更新
+- 物理相关操作放在FixedUpdate中
+- 使用Time.fixedDeltaTime而非Time.deltaTime
+
+### 2. 碰撞检测
+- 使用合适的碰撞层（Layer）
+- 避免在碰撞方法中执行耗时操作
+
+## 资源管理规范
+
+### 1. 资源加载
+- 使用Resources.Load谨慎，避免滥用
+- 考虑使用Addressables或AssetBundle
+
+### 2. 内存管理
+- 及时销毁不再需要的对象
+- 使用`Resources.UnloadUnusedAssets()`释放内存
+
+## 调试和日志规范
+
+### 1. 条件编译
+```csharp
+#if UNITY_EDITOR
+    Debug.Log("调试信息");
+#endif
+```
+
+### 2. 断言使用
+- 使用`Debug.Assert`进行运行时检查
+- 在发布版本中自动禁用
+
+## 平台特定代码
+
+### 1. 平台检测
+```csharp
+#if UNITY_ANDROID
+    // Android特定代码
+#elif UNITY_IOS
+    // iOS特定代码
+#endif
+```
+
+### 2. 输入处理
+- 使用Unity的Input System
+- 支持多种输入设备
+
+## 示例代码模板
+
+### MonoBehaviour模板
+```csharp
+using UnityEngine;
+
+[RequireComponent(typeof(Rigidbody2D))]
+public class PlayerController : MonoBehaviour
+{
+    [Header("移动设置")]
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float jumpForce = 10f;
+    
+    [Header("组件引用")]
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Animator animator;
+    
+    private bool isGrounded;
+    
+    void Awake()
+    {
+        // 确保组件存在
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+    }
+    
+    void Start()
+    {
+        // 初始化逻辑
+    }
+    
+    void Update()
+    {
+        HandleInput();
+        UpdateAnimation();
+    }
+    
+    void FixedUpdate()
+    {
+        HandleMovement();
+        CheckGrounded();
+    }
+    
+    private void HandleInput()
+    {
+        // 输入处理逻辑
+    }
+    
+    private void HandleMovement()
+    {
+        // 移动逻辑
+    }
+    
+    private void UpdateAnimation()
+    {
+        // 动画更新逻辑
+    }
+    
+    private void CheckGrounded()
+    {
+        // 地面检测逻辑
+    }
+}
+```
+
+### ScriptableObject模板
+```csharp
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "New Item", menuName = "Game/Item")]
+public class ItemData : ScriptableObject
+{
+    [Header("基础信息")]
+    public string itemName;
+    public Sprite icon;
+    public string description;
+    
+    [Header("属性")]
+    public int value;
+    public Rarity rarity;
+}
+
+public enum Rarity
+{
+    Common,
+    Uncommon,
+    Rare,
+    Epic,
+    Legendary
+}
+```
+
+## 检查清单
+
+- [ ] MonoBehaviour方法按正确顺序组织
+- [ ] 组件引用在Awake/Start中缓存
+- [ ] 避免在Update中频繁创建对象
+- [ ] 使用合适的序列化属性
+- [ ] 物理操作放在FixedUpdate中
+- [ ] 平台特定代码使用条件编译
+- [ ] 资源管理得当，避免内存泄漏
+- [ ] 调试代码使用条件编译

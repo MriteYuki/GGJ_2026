@@ -1,0 +1,552 @@
+---
+description: 
+alwaysApply: true
+enabled: true
+updatedAt: 2026-01-30T12:48:44.321Z
+provider: 
+---
+
+# Unity游戏开发设计模式规范
+
+针对Unity引擎和C#语言的游戏开发设计模式最佳实践，帮助构建可维护、可扩展的游戏架构。
+
+## 核心设计模式
+
+### 1. 单例模式（Singleton）
+**适用场景**：全局管理器（GameManager、AudioManager、UIManager等）
+
+```csharp
+public class GameManager : MonoBehaviour
+{
+    public static GameManager Instance { get; private set; }
+    
+    [Header("游戏设置")]
+    public int currentLevel = 1;
+    public int playerScore = 0;
+    
+    void Awake()
+    {
+        // 单例模式实现
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    
+    public void LoadLevel(int level)
+    {
+        currentLevel = level;
+        SceneManager.LoadScene("Level_" + level);
+    }
+}
+```
+
+**使用注意事项**：
+- 避免滥用单例模式
+- 考虑使用依赖注入替代过度使用单例
+- 确保线程安全（Unity主线程安全）
+
+### 2. 观察者模式（Observer）
+**适用场景**：事件系统、UI更新、游戏状态变化
+
+```csharp
+// 事件系统实现
+public static class GameEvents
+{
+    public static event Action<int> OnScoreChanged;
+    public static event Action<Player> OnPlayerDeath;
+    public static event Action<int> OnLevelCompleted;
+    
+    public static void TriggerScoreChanged(int newScore)
+    {
+        OnScoreChanged?.Invoke(newScore);
+    }
+    
+    public static void TriggerPlayerDeath(Player player)
+    {
+        OnPlayerDeath?.Invoke(player);
+    }
+}
+
+// 使用示例
+public class UIManager : MonoBehaviour
+{
+    void OnEnable()
+    {
+        GameEvents.OnScoreChanged += UpdateScoreUI;
+        GameEvents.OnPlayerDeath += ShowGameOverScreen;
+    }
+    
+    void OnDisable()
+    {
+        GameEvents.OnScoreChanged -= UpdateScoreUI;
+        GameEvents.OnPlayerDeath -= ShowGameOverScreen;
+    }
+    
+    private void UpdateScoreUI(int score)
+    {
+        // 更新UI
+    }
+}
+```
+
+### 3. 状态模式（State）
+**适用场景**：角色状态、游戏流程、AI行为
+
+```csharp
+// 状态接口
+public interface IPlayerState
+{
+    void EnterState(PlayerController player);
+    void UpdateState(PlayerController player);
+    void ExitState(PlayerController player);
+}
+
+// 具体状态实现
+public class IdleState : IPlayerState
+{
+    public void EnterState(PlayerController player)
+    {
+        player.animator.SetBool("IsMoving", false);
+    }
+    
+    public void UpdateState(PlayerController player)
+    {
+        if (Input.GetAxisRaw("Horizontal") != 0)
+        {
+            player.ChangeState(new MoveState());
+        }
+    }
+    
+    public void ExitState(PlayerController player)
+    {
+        // 退出逻辑
+    }
+}
+
+public class MoveState : IPlayerState
+{
+    public void EnterState(PlayerController player)
+    {
+        player.animator.SetBool("IsMoving", true);
+    }
+    
+    public void UpdateState(PlayerController player)
+    {
+        float moveInput = Input.GetAxisRaw("Horizontal");
+        player.Move(moveInput);
+        
+        if (moveInput == 0)
+        {
+            player.ChangeState(new IdleState());
+        }
+    }
+    
+    public void ExitState(PlayerController player)
+    {
+        // 退出逻辑
+    }
+}
+
+// 状态管理器
+public class PlayerController : MonoBehaviour
+{
+    public IPlayerState currentState;
+    public Animator animator;
+    
+    void Start()
+    {
+        ChangeState(new IdleState());
+    }
+    
+    void Update()
+    {
+        currentState?.UpdateState(this);
+    }
+    
+    public void ChangeState(IPlayerState newState)
+    {
+        currentState?.ExitState(this);
+        currentState = newState;
+        currentState.EnterState(this);
+    }
+    
+    public void Move(float direction)
+    {
+        // 移动逻辑
+    }
+}
+```
+
+### 4. 对象池模式（Object Pool）
+**适用场景**：子弹、特效、敌人生成等频繁创建销毁的对象
+
+```csharp
+public class BulletPool : MonoBehaviour
+{
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private int poolSize = 20;
+    
+    private Queue<GameObject> bulletPool = new Queue<GameObject>();
+    
+    void Start()
+    {
+        InitializePool();
+    }
+    
+    private void InitializePool()
+    {
+        for (int i = 0; i < poolSize; i++)
+        {
+            GameObject bullet = Instantiate(bulletPrefab);
+            bullet.SetActive(false);
+            bulletPool.Enqueue(bullet);
+        }
+    }
+    
+    public GameObject GetBullet()
+    {
+        if (bulletPool.Count > 0)
+        {
+            GameObject bullet = bulletPool.Dequeue();
+            bullet.SetActive(true);
+            return bullet;
+        }
+        else
+        {
+            // 动态扩展池
+            GameObject newBullet = Instantiate(bulletPrefab);
+            return newBullet;
+        }
+    }
+    
+    public void ReturnBullet(GameObject bullet)
+    {
+        bullet.SetActive(false);
+        bulletPool.Enqueue(bullet);
+    }
+}
+```
+
+### 5. 命令模式（Command）
+**适用场景**：撤销/重做、输入处理、AI指令
+
+```csharp
+// 命令接口
+public interface ICommand
+{
+    void Execute();
+    void Undo();
+}
+
+// 具体命令
+public class MoveCommand : ICommand
+{
+    private Player player;
+    private Vector3 direction;
+    private Vector3 previousPosition;
+    
+    public MoveCommand(Player player, Vector3 direction)
+    {
+        this.player = player;
+        this.direction = direction;
+    }
+    
+    public void Execute()
+    {
+        previousPosition = player.transform.position;
+        player.Move(direction);
+    }
+    
+    public void Undo()
+    {
+        player.transform.position = previousPosition;
+    }
+}
+
+// 命令管理器
+public class CommandManager : MonoBehaviour
+{
+    private Stack<ICommand> commandHistory = new Stack<ICommand>();
+    
+    public void ExecuteCommand(ICommand command)
+    {
+        command.Execute();
+        commandHistory.Push(command);
+    }
+    
+    public void UndoLastCommand()
+    {
+        if (commandHistory.Count > 0)
+        {
+            ICommand command = commandHistory.Pop();
+            command.Undo();
+        }
+    }
+}
+```
+
+### 6. 组件模式（Component）
+**适用场景**：Unity内置，用于构建灵活的实体系统
+
+```csharp
+// 基础组件
+public abstract class GameComponent : MonoBehaviour
+{
+    public virtual void Initialize() { }
+    public virtual void UpdateComponent() { }
+}
+
+// 具体组件
+public class HealthComponent : GameComponent
+{
+    [SerializeField] private int maxHealth = 100;
+    private int currentHealth;
+    
+    public event Action<int> OnHealthChanged;
+    public event Action OnDeath;
+    
+    public override void Initialize()
+    {
+        currentHealth = maxHealth;
+    }
+    
+    public void TakeDamage(int damage)
+    {
+        currentHealth = Mathf.Max(0, currentHealth - damage);
+        OnHealthChanged?.Invoke(currentHealth);
+        
+        if (currentHealth <= 0)
+        {
+            OnDeath?.Invoke();
+        }
+    }
+}
+
+public class MovementComponent : GameComponent
+{
+    [SerializeField] private float moveSpeed = 5f;
+    private Rigidbody2D rb;
+    
+    public override void Initialize()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+    
+    public void Move(Vector2 direction)
+    {
+        rb.velocity = direction * moveSpeed;
+    }
+}
+```
+
+## Unity特定架构模式
+
+### 1. MVC/MVP模式
+**适用场景**：UI系统、游戏数据管理
+
+```csharp
+// Model - 数据层
+[System.Serializable]
+public class PlayerData
+{
+    public int level = 1;
+    public int experience = 0;
+    public int gold = 0;
+    
+    public void AddExperience(int exp)
+    {
+        experience += exp;
+        // 升级逻辑
+    }
+}
+
+// View - 表现层
+public class PlayerUIView : MonoBehaviour
+{
+    [SerializeField] private Text levelText;
+    [SerializeField] private Text expText;
+    [SerializeField] private Text goldText;
+    
+    public void UpdateUI(PlayerData data)
+    {
+        levelText.text = $"Level: {data.level}";
+        expText.text = $"EXP: {data.experience}";
+        goldText.text = $"Gold: {data.gold}";
+    }
+}
+
+// Presenter/Controller - 控制层
+public class PlayerController : MonoBehaviour
+{
+    public PlayerData playerData;
+    public PlayerUIView uiView;
+    
+    void Start()
+    {
+        UpdateUI();
+    }
+    
+    public void GainExperience(int exp)
+    {
+        playerData.AddExperience(exp);
+        UpdateUI();
+    }
+    
+    private void UpdateUI()
+    {
+        uiView.UpdateUI(playerData);
+    }
+}
+```
+
+### 2. 服务定位器模式（Service Locator）
+**适用场景**：依赖管理、服务访问
+
+```csharp
+public static class ServiceLocator
+{
+    private static Dictionary<Type, object> services = new Dictionary<Type, object>();
+    
+    public static void RegisterService<T>(T service)
+    {
+        services[typeof(T)] = service;
+    }
+    
+    public static T GetService<T>()
+    {
+        if (services.TryGetValue(typeof(T), out object service))
+        {
+            return (T)service;
+        }
+        throw new Exception($"Service of type {typeof(T)} not found");
+    }
+}
+
+// 使用示例
+public class AudioManager : MonoBehaviour
+{
+    void Awake()
+    {
+        ServiceLocator.RegisterService<IAudioService>(this);
+    }
+    
+    public void PlaySound(string soundName)
+    {
+        // 播放音效逻辑
+    }
+}
+
+public class Player : MonoBehaviour
+{
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            var audioService = ServiceLocator.GetService<IAudioService>();
+            audioService.PlaySound("Jump");
+        }
+    }
+}
+```
+
+## 设计模式选择指南
+
+### 根据问题类型选择模式
+- **全局管理**：单例模式、服务定位器
+- **状态管理**：状态模式、观察者模式
+- **对象管理**：对象池模式、工厂模式
+- **输入处理**：命令模式、策略模式
+- **数据管理**：MVC模式、仓库模式
+
+### Unity特性考虑
+- 利用Unity的组件系统
+- 考虑序列化需求
+- 注意性能影响（GC、内存）
+- 适应Unity的生命周期
+
+## 反模式警告
+
+### 避免的模式
+- **上帝对象**（God Object）：一个类承担过多职责
+- **紧耦合**：类之间直接引用，难以测试和维护
+- **过度工程**：为简单问题使用复杂模式
+
+### 最佳实践
+- 优先使用组合而非继承
+- 保持类的单一职责
+- 使用接口进行抽象
+- 考虑测试的便利性
+
+## 代码示例模板
+
+### 状态机模板
+```csharp
+public class StateMachine<T> where T : MonoBehaviour
+{
+    private T owner;
+    private IState<T> currentState;
+    
+    public StateMachine(T owner)
+    {
+        this.owner = owner;
+    }
+    
+    public void ChangeState(IState<T> newState)
+    {
+        currentState?.Exit(owner);
+        currentState = newState;
+        currentState?.Enter(owner);
+    }
+    
+    public void Update()
+    {
+        currentState?.Execute(owner);
+    }
+}
+
+public interface IState<T> where T : MonoBehaviour
+{
+    void Enter(T owner);
+    void Execute(T owner);
+    void Exit(T owner);
+}
+```
+
+### 事件系统模板
+```csharp
+public class EventSystem
+{
+    private static EventSystem instance;
+    public static EventSystem Instance => instance ??= new EventSystem();
+    
+    private Dictionary<Type, Delegate> eventHandlers = new Dictionary<Type, Delegate>();
+    
+    public void Subscribe<T>(Action<T> handler)
+    {
+        Type eventType = typeof(T);
+        if (eventHandlers.ContainsKey(eventType))
+        {
+            eventHandlers[eventType] = Delegate.Combine(eventHandlers[eventType], handler);
+        }
+        else
+        {
+            eventHandlers[eventType] = handler;
+        }
+    }
+    
+    public void Publish<T>(T eventData)
+    {
+        Type eventType = typeof(T);
+        if (eventHandlers.ContainsKey(eventType))
+        {
+            (eventHandlers[eventType] as Action<T>)?.Invoke(eventData);
+        }
+    }
+}
+```

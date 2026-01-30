@@ -1,0 +1,146 @@
+---
+description: 
+alwaysApply: true
+enabled: true
+updatedAt: 2026-01-30T12:41:17.511Z
+provider: 
+---
+
+# C#代码书写规范
+
+基于微软官方C#编码约定和Unity最佳实践，确保代码的一致性和可读性。
+
+## 命名约定
+
+### 1. Pascal命名法（PascalCase）
+- 类名、方法名、属性名、命名空间、公共字段
+- 示例：`PlayerController`, `UpdateTargetY`
+
+### 2. 驼峰命名法（camelCase）
+- 局部变量、私有字段、方法参数
+- 示例：`mainCamera`, `followSpeed`
+
+### 3. 常量命名
+- 全部大写，用下划线分隔
+- 示例：`MAX_SPEED`, `DEFAULT_VALUE`
+
+## 代码格式
+
+### 1. 缩进和空格
+- 使用4个空格缩进（不要使用Tab）
+- 操作符前后加空格：`x = y + z`
+- 逗号后加空格：`method(arg1, arg2)`
+- 花括号独占一行
+
+### 2. 行长度
+- 每行不超过120个字符
+- 超过时合理换行
+
+### 3. 空行使用
+- 方法之间保留1个空行
+- 类内逻辑块之间保留1个空行
+- 避免连续多个空行
+
+## 语言特性规范
+
+### 1. 访问修饰符
+- 明确指定访问级别（public, private, protected, internal）
+- 字段默认设为private，通过属性暴露
+
+### 2. 使用var关键字
+- 当类型明显时使用var：`var player = new Player();`
+- 基本类型明确声明：`int count = 10;`
+
+### 3. 异常处理
+- 使用具体的异常类型，避免catch(Exception)
+- 在finally块中释放资源
+
+## Unity特定规范
+
+### 1. MonoBehaviour生命周期
+- 按顺序组织方法：Awake, Start, Update, FixedUpdate, OnDestroy
+- 避免在Update中执行耗时操作
+
+### 2. 序列化字段
+- 使用[SerializeField]属性暴露私有字段
+- 公共字段仅在必要时使用
+
+### 3. 组件引用
+- 在Start或Awake中获取组件引用
+- 使用[RequireComponent]属性确保依赖
+
+## 注释规范
+
+### 1. XML文档注释
+- 公共API使用XML文档注释
+- 包含summary, param, returns等标签
+
+### 2. 单行注释
+- 使用//进行单行注释
+- 注释应解释"为什么"而不是"是什么"
+
+### 3. 区域注释
+- 使用#region组织相关代码
+- 保持区域大小适中
+
+## 最佳实践
+
+### 1. 单一职责原则
+- 每个类和方法只负责一个功能
+- 避免上帝类（God Class）
+
+### 2. 依赖注入
+- 使用构造函数或属性注入依赖
+- 避免紧耦合
+
+### 3. 性能优化
+- 避免在Update中频繁创建对象
+- 使用对象池管理频繁创建销毁的对象
+- 合理使用缓存
+
+## 示例代码
+
+```csharp
+using UnityEngine;
+
+namespace Game.Player
+{
+    /// <summary>
+    /// 玩家控制器，处理玩家输入和移动
+    /// </summary>
+    public class PlayerController : MonoBehaviour
+    {
+        [SerializeField] private float moveSpeed = 5f;
+        [SerializeField] private Rigidbody2D rb;
+        
+        private Vector2 movement;
+        
+        void Start()
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
+        
+        void Update()
+        {
+            movement.x = Input.GetAxisRaw("Horizontal");
+            movement.y = Input.GetAxisRaw("Vertical");
+        }
+        
+        void FixedUpdate()
+        {
+            rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+        }
+    }
+}
+```
+
+## 检查清单
+
+- [ ] 命名符合PascalCase/camelCase规范
+- [ ] 缩进使用4个空格
+- [ ] 访问修饰符明确指定
+- [ ] 注释清晰有意义
+- [ ] 方法长度适中（不超过50行）
+- [ ] 遵循单一职责原则
+- [ ] 异常处理得当
+- [ ] 性能考虑周全
