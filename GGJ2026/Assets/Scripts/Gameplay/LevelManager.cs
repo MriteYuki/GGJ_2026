@@ -270,7 +270,7 @@ namespace GGJ2026.Gameplay
             else
             {
                 Debug.Log("<color=#FF0000>关卡未通过，请检查条件</color>");
-                GameManager.Instance.LoadStartGame();
+                ResetLevel();
             }
         }
 
