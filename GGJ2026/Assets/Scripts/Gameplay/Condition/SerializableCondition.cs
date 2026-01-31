@@ -20,8 +20,8 @@ namespace GGJ2026.Gameplay.Condition
 
         [SerializeField] private Vector2 checkPosition;
         [SerializeField] private float checkRadius;
-        [SerializeField] private Vector2 checkRotation;
-        [SerializeField] private Vector2 checkScale;
+        [SerializeField] private RotationType checkRotation;
+        [SerializeField] private ScaleType checkScale;
 
         /// <summary>
         /// 条件类型

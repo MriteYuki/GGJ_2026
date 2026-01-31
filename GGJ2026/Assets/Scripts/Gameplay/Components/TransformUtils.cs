@@ -154,13 +154,23 @@ namespace GGJ2026
         }
 
         /// <summary>
-        /// 旋转指定角度
+        /// 旋转到指定角度
         /// </summary>
-        public void RotateBy(Vector3 rotationDelta)
+        public void RotateBy(RotationType rotationType)
         {
             if (!enableRotation) return;
-
-            Vector3 newRotation = transform.eulerAngles + rotationDelta;
+            Vector3 newRotation = rotationType switch
+            {
+                RotationType.North => Vector3.zero,
+                RotationType.Northeast => new Vector3(0, 0, -45),
+                RotationType.East => new Vector3(0, 0, -90),
+                RotationType.Southeast => new Vector3(0, 0, -135),
+                RotationType.South => new Vector3(0, 0, -180),
+                RotationType.Southwest => new Vector3(0, 0, -225),
+                RotationType.West => new Vector3(0, 0, -270),
+                RotationType.Northwest => new Vector3(0, 0, -315),
+                _ => Vector3.zero
+            };
             if (lockXAxis) newRotation.x = transform.eulerAngles.x;
             if (lockYAxis) newRotation.y = transform.eulerAngles.y;
             if (lockZAxis) newRotation.z = transform.eulerAngles.z;
@@ -171,11 +181,18 @@ namespace GGJ2026
         /// <summary>
         /// 缩放指定比例
         /// </summary>
-        public void ScaleBy(Vector3 scaleDelta)
+        public void ScaleBy(ScaleType scaleType)
         {
             if (!enableScale) return;
 
-            Vector3 newScale = transform.localScale + scaleDelta;
+            Vector3 newScale = scaleType switch
+            {
+                ScaleType.Small => Vector2.one * 0.5f,
+                ScaleType.Medium => Vector2.one,
+                ScaleType.Large => Vector2.one * 2f,
+                _ => Vector2.one
+            };
+
             if (lockXAxis) newScale.x = transform.localScale.x;
             if (lockYAxis) newScale.y = transform.localScale.y;
             if (lockZAxis) newScale.z = transform.localScale.z;
@@ -240,29 +257,45 @@ namespace GGJ2026
 
         private void HandleTransformOperations()
         {
+            var feature = GetComponent<Feature>();
+
+            if (feature == null)
+            {
+                Debug.LogWarning("Feature not found, transform operations disabled");
+                return;
+            }
+
             // 缩放操作
             if (enableScale)
             {
-                if (Input.GetKey(scaleUpKey))
+                if (Input.GetKeyDown(scaleUpKey))
                 {
-                    ScaleBy(Vector3.one * scaleSpeed * Time.deltaTime);
+                    var next = ((int)feature.Scale + 1) % 3;
+                    feature.Scale = (ScaleType)next;
+                    ScaleBy((ScaleType)next);
                 }
-                if (Input.GetKey(scaleDownKey))
+                if (Input.GetKeyDown(scaleDownKey))
                 {
-                    ScaleBy(-Vector3.one * scaleSpeed * Time.deltaTime);
+                    var last = ((int)feature.Scale - 1 + 3) % 3;
+                    feature.Scale = (ScaleType)last;
+                    ScaleBy((ScaleType)last);
                 }
             }
 
             // 旋转操作
             if (enableRotation)
             {
-                if (Input.GetKey(rotateLeftKey))
+                if (Input.GetKeyDown(rotateLeftKey))
                 {
-                    RotateBy(new Vector3(0, 0, -rotateSpeed * Time.deltaTime));
+                    var next = ((int)feature.Rotation - 1 + 8) % 8;
+                    feature.Rotation = (RotationType)next;
+                    RotateBy((RotationType)next);
                 }
-                if (Input.GetKey(rotateRightKey))
+                if (Input.GetKeyDown(rotateRightKey))
                 {
-                    RotateBy(new Vector3(0, 0, rotateSpeed * Time.deltaTime));
+                    var last = ((int)feature.Rotation + 1) % 8;
+                    feature.Rotation = (RotationType)last;
+                    RotateBy((RotationType)last);
                 }
             }
 

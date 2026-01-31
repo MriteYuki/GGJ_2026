@@ -19,11 +19,11 @@ namespace GGJ2026.Gameplay.Condition
 
         [Header("检测旋转-相对容差角度")]
         [Tooltip("设置旋转角度的容差范围 X:最小值 Y:最大值")]
-        [SerializeField] protected Vector2 checkRotation;
+        [SerializeField] protected RotationType checkRotation;
 
         [Header("检测比例-容差比例")]
         [Tooltip("设置放缩比例的容差范围 X:最小值 Y:最大值")]
-        [SerializeField] protected Vector2 checkScale;
+        [SerializeField] protected ScaleType checkScale;
 
         /// <summary>
         /// 待比较特征
@@ -37,7 +37,7 @@ namespace GGJ2026.Gameplay.Condition
         /// <summary>
         /// 设置比较参数
         /// </summary>
-        public void Set(Vector2 checkPosition, float checkRadius, Vector2 checkRotation, Vector2 checkScale)
+        public void Set(Vector2 checkPosition, float checkRadius, RotationType checkRotation, ScaleType checkScale)
         {
             this.checkPosition = checkPosition;
             this.checkRadius = checkRadius;
@@ -68,25 +68,24 @@ namespace GGJ2026.Gameplay.Condition
         /// 检测旋转角度是否在容差范围内
         /// </summary>
         /// <returns>是否在范围内</returns>
-        protected bool CheckRotationTolerance()
+        protected bool CheckRotation()
         {
             if (compareFeature == null)
                 return false;
 
-            float angle = Quaternion.Angle(new Quaternion(0, 0, 0, 1), compareFeature.Rotation);
-            return angle >= checkRotation.x && angle <= checkRotation.y;
+            return checkRotation == compareFeature.Rotation;
         }
 
         /// <summary>
         /// 检测缩放比例是否在容差范围内
         /// </summary>
         /// <returns>是否在范围内</returns>
-        protected bool CheckScaleTolerance()
+        protected bool CheckScale()
         {
             if (compareFeature == null)
                 return false;
-            return compareFeature.Scale.x >= checkScale.x &&
-                   compareFeature.Scale.x <= checkScale.y;
+
+            return compareFeature.Scale == checkScale;
         }
 
         /// <summary>
@@ -102,12 +101,12 @@ namespace GGJ2026.Gameplay.Condition
                 result = false;
             }
 
-            if (!CheckRotationTolerance())
+            if (!CheckRotation())
             {
                 result = false;
             }
 
-            if (!CheckScaleTolerance())
+            if (!CheckScale())
             {
                 result = false;
             }

@@ -15,6 +15,31 @@ namespace GGJ2026
     }
 
     /// <summary>
+    /// 旋转方向类型（八个方向）
+    /// </summary>
+    public enum RotationType
+    {
+        North,      // 0° - 北
+        Northeast,  // 45° - 东北
+        East,       // 90° - 东
+        Southeast,  // 135° - 东南
+        South,      // 180° - 南
+        Southwest,  // 225° - 西南
+        West,       // 270° - 西
+        Northwest   // 315° - 西北
+    }
+
+    /// <summary>
+    /// 比例类型
+    /// </summary>
+    public enum ScaleType
+    {
+        Small,
+        Medium,
+        Large
+    }
+
+    /// <summary>
     /// 面部特征数据类
     /// </summary>
     [System.Serializable]
@@ -23,6 +48,10 @@ namespace GGJ2026
         [Header("基础信息")]
         [SerializeField] private FeatureType featureType;
         [SerializeField] private string featureID;
+
+        [SerializeField] private RotationType rotationType = RotationType.North;
+
+        [SerializeField] private ScaleType scaleType = ScaleType.Medium;
 
 
         /// <summary>
@@ -54,17 +83,19 @@ namespace GGJ2026
         /// <summary>
         /// 比例
         /// </summary>
-        public Vector3 Scale
+        public ScaleType Scale
         {
-            get => transform.localScale;
+            get => scaleType;
+            set => scaleType = value;
         }
 
         /// <summary>
         /// 旋转
         /// </summary>
-        public Quaternion Rotation
+        public RotationType Rotation
         {
-            get => transform.localRotation;
+            get => rotationType;
+            set => rotationType = value;
         }
 
         /// <summary>
@@ -86,33 +117,49 @@ namespace GGJ2026
             featureID = id ?? string.Empty;
         }
 
-        /// <summary>
-        /// 获取旋转的欧拉角度
-        /// </summary>
-        public Vector3 EulerAngles
-        {
-            get => Rotation.eulerAngles;
-        }
-
-        /// <summary>
-        /// 创建变换矩阵
-        /// </summary>
-        public Matrix4x4 GetTransformMatrix()
-        {
-            return Matrix4x4.TRS(Position, Rotation, Scale);
-        }
-
-        /// <summary>
-        /// 复制特征数据
-        /// </summary>
-        public Feature Copy()
-        {
-            return new(featureType, featureID);
-        }
-
         public override string ToString()
         {
-            return $"Feature {{Type: {featureType}, ID: {featureID}, Position: {Position}, Scale: {Scale}, Rotation: {Rotation.eulerAngles}}}";
+            return $"Feature {{Type: {featureType}, ID: {featureID}, Position: {Position}, Scale: {Scale}, Rotation: {Rotation}}}";
         }
+
+#if UNITY_EDITOR
+
+        public void OnValidate()
+        {
+            var angles = rotationType switch
+            {
+                RotationType.North => Vector3.zero,
+
+                RotationType.Northeast => new Vector3(0, 0, -45),
+
+                RotationType.East => new Vector3(0, 0, -90),
+
+                RotationType.Southeast => new Vector3(0, 0, -135),
+
+                RotationType.South => new Vector3(0, 0, -180),
+
+                RotationType.Southwest => new Vector3(0, 0, -225),
+
+                RotationType.West => new Vector3(0, 0, -270),
+
+                RotationType.Northwest => new Vector3(0, 0, -315),
+
+                _ => Vector3.zero
+            };
+
+            transform.eulerAngles = angles;
+
+            var scale = scaleType switch
+            {
+
+                ScaleType.Small => Vector3.one * 0.5f,
+                ScaleType.Medium => Vector3.one,
+                ScaleType.Large => Vector3.one * 2f,
+                _ => Vector3.one
+            };
+
+            transform.localScale = scale;
+        }
+#endif
     }
 }
