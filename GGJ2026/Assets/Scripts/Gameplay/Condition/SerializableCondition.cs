@@ -1,0 +1,98 @@
+using GGJ2026.FaceComponent;
+using System;
+using UnityEngine;
+
+namespace GGJ2026.Gameplay.Condition
+{
+    /// <summary>
+    /// 可序列化的条件数据
+    /// </summary>
+    [System.Serializable]
+    public class SerializableCondition
+    {
+        [Header("条件类型")]
+        [SerializeField] private ConditionType conditionType;
+
+        [Header("ID查找条件")]
+        [SerializeField] private string targetFeatureId;
+
+        [Header("类型查找条件")]
+        [SerializeField] private FeatureType targetFeatureType;
+
+        [Header("比较设置")]
+        [SerializeField] private float checkRadius;
+        [SerializeField] private Vector2 checkRotation;
+        [SerializeField] private Vector2 checkScale;
+
+        /// <summary>
+        /// 条件类型
+        /// </summary>
+        public ConditionType Type
+        {
+            get => conditionType;
+            set => conditionType = value;
+        }
+
+        /// <summary>
+        /// 目标特征ID
+        /// </summary>
+        public string TargetFeatureId
+        {
+            get => targetFeatureId;
+            set => targetFeatureId = value;
+        }
+
+        /// <summary>
+        /// 目标特征类型
+        /// </summary>
+        public FeatureType TargetFeatureType
+        {
+            get => targetFeatureType;
+            set => targetFeatureType = value;
+        }
+
+        /// <summary>
+        /// 转换为具体的条件对象
+        /// </summary>
+        public ConditionBase ToCondition()
+        {
+            switch (conditionType)
+            {
+                case ConditionType.FeatureById:
+                    var idCondition = new FeatureByIdCondition();
+                    return idCondition;
+
+                case ConditionType.FeatureByType:
+                    var typeCondition = new FeatureByTypeCondition();
+                    return typeCondition;
+
+                default:
+                    throw new ArgumentException($"未知的条件类型: {conditionType}");
+            }
+        }
+
+        /// <summary>
+        /// 从条件对象创建序列化数据
+        /// </summary>
+        public static SerializableCondition FromCondition(ConditionBase condition)
+        {
+            var serializable = new SerializableCondition();
+
+            if (condition is FeatureByIdCondition idCondition)
+            {
+                serializable.conditionType = ConditionType.FeatureById;
+            }
+            else if (condition is FeatureByTypeCondition typeCondition)
+            {
+                serializable.conditionType = ConditionType.FeatureByType;
+            }
+
+            return serializable;
+        }
+
+        public override string ToString()
+        {
+            return $"SerializableCondition {{Type: {conditionType}, TargetId: {targetFeatureId}, TargetType: {targetFeatureType}}}";
+        }
+    }
+}
