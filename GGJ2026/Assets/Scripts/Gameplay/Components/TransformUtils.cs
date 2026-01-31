@@ -359,9 +359,13 @@ namespace GGJ2026
         {
             SetSelectionVisual(isSelected);
 
-            // 可以在这里触发选择事件
-            Debug.Log($"{gameObject.name} {(isSelected ? "selected" : "deselected")}" +
-            $"- 当前位置: {transform.position} - 当前旋转: {transform.eulerAngles} - 当前缩放: {transform.localScale}");
+            var feature = GetComponent<Feature>();
+            if (feature)
+            {
+                // 可以在这里触发选择事件
+                Debug.Log($"{gameObject.name} {(isSelected ? "selected" : "deselected")}" +
+                $"- 当前位置: {transform.position} - 当前旋转: {feature.Rotation} - 当前缩放: {feature.Scale}");
+            }
         }
 
         #endregion
