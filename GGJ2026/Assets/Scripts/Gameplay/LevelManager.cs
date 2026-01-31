@@ -265,10 +265,12 @@ namespace GGJ2026.Gameplay
             {
                 Debug.Log("<color=#FF0000>关卡通过！</color>");
                 // 触发关卡通过事件
+                GameManager.Instance.LoadNextScene();
             }
             else
             {
                 Debug.Log("<color=#FF0000>关卡未通过，请检查条件</color>");
+                GameManager.Instance.LoadStartGame();
             }
         }
 

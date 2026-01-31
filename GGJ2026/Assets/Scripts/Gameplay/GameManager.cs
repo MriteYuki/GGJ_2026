@@ -99,13 +99,13 @@ namespace GGJ2026.Gameplay
             {
                 Debug.Log($"GameManager初始化完成，当前场景: {currentScene}");
             }
+
+            LoadStartGame();
         }
 
         void OnEnable()
         {
             SceneManager.sceneLoaded += OnSceneLoaded;
-
-            LoadStartGame();
         }
 
         void OnDisable()
@@ -119,10 +119,10 @@ namespace GGJ2026.Gameplay
 
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.N))
-            {
-                LoadNextScene();
-            }
+            //if (Input.GetKeyDown(KeyCode.N))
+            //{
+            //    LoadNextScene();
+            //}
         }
 
         /// <summary>
@@ -252,7 +252,10 @@ namespace GGJ2026.Gameplay
                 Debug.Log($"最终关卡: {currentFlowChain.FinalLevel}");
             }
 
-            LoadScene(sceneFlowConfig.startScene);
+            if(currentScene != currentFlowChain.FirstLevel)
+            {
+                LoadScene(currentFlowChain.FirstLevel);
+            }
         }
 
         /// <summary>
