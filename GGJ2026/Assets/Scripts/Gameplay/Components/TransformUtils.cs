@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GGJ2026.FaceComponent
+namespace GGJ2026
 {
     /// <summary>
     /// Transform交互组件 - 3D物体的Transform工具，提供游戏内Transform操作功能
@@ -219,7 +219,6 @@ namespace GGJ2026.FaceComponent
                 }
 
                 bool clickedThisObject = raycastHit && hit.collider != null && hit.collider.gameObject == gameObject;
-                bool clickedEmptySpace = !raycastHit;
 
                 // 处理选择状态变化
                 if (clickedThisObject)
@@ -231,7 +230,7 @@ namespace GGJ2026.FaceComponent
                     }
                     // 如果已经选中，保持选中状态（不取消选择）
                 }
-                else if (clickedEmptySpace && isSelected)
+                else if (isSelected)
                 {
                     // 点击了空白处且当前已选中 -> 取消选择
                     Deselect();
@@ -328,7 +327,8 @@ namespace GGJ2026.FaceComponent
             SetSelectionVisual(isSelected);
 
             // 可以在这里触发选择事件
-            Debug.Log($"{gameObject.name} {(isSelected ? "selected" : "deselected")} - 调用栈: {System.Environment.StackTrace}");
+            Debug.Log($"{gameObject.name} {(isSelected ? "selected" : "deselected")}" +
+            $"- 当前位置: {transform.position} - 当前旋转: {transform.eulerAngles} - 当前缩放: {transform.localScale}");
         }
 
         #endregion

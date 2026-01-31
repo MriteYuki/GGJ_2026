@@ -1,4 +1,3 @@
-using GGJ2026.FaceComponent;
 using System;
 using UnityEngine;
 
@@ -54,21 +53,26 @@ namespace GGJ2026.Gameplay.Condition
         /// <summary>
         /// 转换为具体的条件对象
         /// </summary>
-        public ConditionBase ToCondition()
+        public ConditionBase ToCondition(Feature features)
         {
+            ConditionBase condition;
             switch (conditionType)
             {
                 case ConditionType.FeatureById:
-                    var idCondition = new FeatureByIdCondition();
-                    return idCondition;
-
+                    condition = new FeatureByIdCondition(targetFeatureId);
+                    break;
                 case ConditionType.FeatureByType:
-                    var typeCondition = new FeatureByTypeCondition();
-                    return typeCondition;
-
+                    condition = new FeatureByTypeCondition(targetFeatureType);
+                    break;
                 default:
-                    throw new ArgumentException($"未知的条件类型: {conditionType}");
+                    condition = new ConditionBase();
+                    break;
             }
+
+            condition.CompareFeature = features;
+            condition.Set(checkPosition, checkRadius, checkRotation, checkScale);
+
+            return condition;
         }
 
         /// <summary>
@@ -92,7 +96,8 @@ namespace GGJ2026.Gameplay.Condition
 
         public override string ToString()
         {
-            return $"SerializableCondition {{Type: {conditionType}, TargetId: {targetFeatureId}, TargetType: {targetFeatureType}}}";
+            return $"SerializableCondition {{Type: {conditionType}, TargetId: {targetFeatureId}, TargetType: {targetFeatureType}" +
+            $"Position: {checkPosition}, Radius: {checkRadius}, Rotation: {checkRotation}, Scale: {checkScale}}}";
         }
     }
 }

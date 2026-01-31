@@ -1,4 +1,3 @@
-using GGJ2026.FaceComponent;
 using UnityEngine;
 
 namespace GGJ2026.Gameplay.Condition
@@ -6,13 +5,14 @@ namespace GGJ2026.Gameplay.Condition
     /// <summary>
     /// 条件基类
     /// </summary>
-    public abstract class ConditionBase
+    public class ConditionBase
     {
         [Header("比较对象")]
-        [SerializeField] protected Feature targetFeature;
         [SerializeField] protected Feature compareFeature;
 
         [Header("比较设置")]
+        [Header("检测位置-相对位置")]
+        [SerializeField] protected Vector2 checkPosition;
 
         [Header("检测位置-相对半径")]
         [SerializeField] protected float checkRadius;
@@ -26,15 +26,6 @@ namespace GGJ2026.Gameplay.Condition
         [SerializeField] protected Vector2 checkScale;
 
         /// <summary>
-        /// 目标特征
-        /// </summary>
-        public Feature TargetFeature
-        {
-            get => targetFeature;
-            set => targetFeature = value;
-        }
-
-        /// <summary>
         /// 待比较特征
         /// </summary>
         public Feature CompareFeature
@@ -44,10 +35,21 @@ namespace GGJ2026.Gameplay.Condition
         }
 
         /// <summary>
+        /// 设置比较参数
+        /// </summary>
+        public void Set(Vector2 checkPosition, float checkRadius, Vector2 checkRotation, Vector2 checkScale)
+        {
+            this.checkPosition = checkPosition;
+            this.checkRadius = checkRadius;
+            this.checkRotation = checkRotation;
+            this.checkScale = checkScale;
+        }
+
+        /// <summary>
         /// 检查条件是否满足
         /// </summary>
         /// <returns>是否满足条件</returns>
-        public abstract bool Check();
+        public virtual bool Check() => true;
 
         /// <summary>
         /// 检测位置是否在相对半径范围内
@@ -55,10 +57,10 @@ namespace GGJ2026.Gameplay.Condition
         /// <returns>是否在范围内</returns>
         protected bool CheckPositionRadius()
         {
-            if (targetFeature == null || compareFeature == null)
+            if (compareFeature == null)
                 return false;
 
-            float distance = Vector3.Distance(targetFeature.Position, compareFeature.Position);
+            float distance = Vector3.Distance(checkPosition, compareFeature.Position);
             return distance <= checkRadius;
         }
 
@@ -68,10 +70,10 @@ namespace GGJ2026.Gameplay.Condition
         /// <returns>是否在范围内</returns>
         protected bool CheckRotationTolerance()
         {
-            if (targetFeature == null || compareFeature == null)
+            if (compareFeature == null)
                 return false;
 
-            float angle = Quaternion.Angle(targetFeature.Rotation, compareFeature.Rotation);
+            float angle = Quaternion.Angle(new Quaternion(0, 0, 0, 1), compareFeature.Rotation);
             return angle >= checkRotation.x && angle <= checkRotation.y;
         }
 
@@ -81,12 +83,10 @@ namespace GGJ2026.Gameplay.Condition
         /// <returns>是否在范围内</returns>
         protected bool CheckScaleTolerance()
         {
-            if (targetFeature == null || compareFeature == null)
+            if (compareFeature == null)
                 return false;
-
-            Vector3 scaleDiff = targetFeature.Scale - compareFeature.Scale;
-            float magnitude = scaleDiff.magnitude;
-            return magnitude >= checkScale.x && magnitude <= checkScale.y;
+            return compareFeature.Scale.x >= checkScale.x &&
+                   compareFeature.Scale.x <= checkScale.y;
         }
 
         /// <summary>

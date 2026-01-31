@@ -130,7 +130,7 @@ namespace GGJ2026.Gameplay.Condition
             height += EditorGUI.GetPropertyHeight(checkPositionProp) + spacing;
             height += EditorGUI.GetPropertyHeight(checkRadiusProp) + spacing;
             height += EditorGUI.GetPropertyHeight(checkRotationProp) + spacing;
-            height += EditorGUI.GetPropertyHeight(checkScaleProp);
+            height += EditorGUI.GetPropertyHeight(checkScaleProp) + spacing;
 
             return height;
         }

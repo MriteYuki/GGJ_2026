@@ -59,79 +59,6 @@ namespace GGJ2026.Gameplay.ScriptableObjects
         }
 
         /// <summary>
-        /// 检查所有条件是否满足
-        /// </summary>
-        public bool CheckAllConditions(List<Feature> availableFeatures = null)
-        {
-            if (serializableConditions == null || serializableConditions.Count == 0)
-                return true;
-
-            foreach (var serializableCondition in serializableConditions)
-            {
-                if (serializableCondition == null)
-                {
-                    Debug.LogWarning("LevelData中存在空条件，跳过检查");
-                    continue;
-                }
-
-                try
-                {
-                    // 转换为运行时条件对象
-                    var condition = serializableCondition.ToCondition();
-
-                    // 如果提供了可用特征列表，则设置到条件中
-                    if (availableFeatures != null)
-                    {
-                        SetConditionFeatures(condition, availableFeatures);
-                    }
-
-                    if (!condition.Check())
-                    {
-                        return false;
-                    }
-                }
-                catch (System.Exception ex)
-                {
-                    Debug.LogError($"条件检查失败: {ex.Message}");
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// 为条件设置特征列表
-        /// </summary>
-        private void SetConditionFeatures(ConditionBase condition, List<Feature> availableFeatures)
-        {
-            if (condition is FeatureByIdCondition idCondition)
-            {
-                // 检查属性是否存在，避免运行时错误
-                var property = typeof(FeatureByIdCondition).GetProperty("FaceFeatures");
-                if (property != null && property.CanWrite)
-                {
-                    property.SetValue(idCondition, availableFeatures);
-                }
-                else
-                {
-                    Debug.LogWarning("FeatureByIdCondition.FaceFeatures属性不存在或不可写");
-                }
-            }
-            else if (condition is FeatureByTypeCondition typeCondition)
-            {
-                var property = typeof(FeatureByTypeCondition).GetProperty("FaceFeatures");
-                if (property != null && property.CanWrite)
-                {
-                    property.SetValue(typeCondition, availableFeatures);
-                }
-                else
-                {
-                    Debug.LogWarning("FeatureByTypeCondition.FaceFeatures属性不存在或不可写");
-                }
-            }
-        }
-
-        /// <summary>
         /// 检查是否有空条件
         /// </summary>
         public bool HasNullConditions()
@@ -167,22 +94,6 @@ namespace GGJ2026.Gameplay.ScriptableObjects
                     serializableConditions.Add(SerializableCondition.FromCondition(condition));
                 }
             }
-        }
-
-        /// <summary>
-        /// 转换为运行时条件列表
-        /// </summary>
-        public List<ConditionBase> ConvertToRuntimeConditions()
-        {
-            var runtimeConditions = new List<ConditionBase>();
-            foreach (var serializableCondition in serializableConditions)
-            {
-                if (serializableCondition != null)
-                {
-                    runtimeConditions.Add(serializableCondition.ToCondition());
-                }
-            }
-            return runtimeConditions;
         }
 
         /// <summary>
