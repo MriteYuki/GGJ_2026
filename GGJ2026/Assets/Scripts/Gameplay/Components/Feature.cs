@@ -152,9 +152,9 @@ namespace GGJ2026
             var scale = scaleType switch
             {
 
-                ScaleType.Small => Vector3.one * 0.5f,
+                ScaleType.Small => Vector3.one * 0.7f,
                 ScaleType.Medium => Vector3.one,
-                ScaleType.Large => Vector3.one * 2f,
+                ScaleType.Large => Vector3.one * 1.4f,
                 _ => Vector3.one
             };
 
