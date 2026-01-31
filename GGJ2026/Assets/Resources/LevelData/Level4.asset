@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level4
   m_EditorClassIdentifier: 
   serializableConditions:
-  - conditionType: 1
+  - conditionType: 0
     targetFeatureId: 
     targetFeatureType: 4
     checkRadius: 0

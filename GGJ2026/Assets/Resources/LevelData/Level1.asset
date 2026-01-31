@@ -15,7 +15,25 @@ MonoBehaviour:
   serializableConditions:
   - conditionType: 1
     targetFeatureId: 
-    targetFeatureType: 4
+    targetFeatureType: 1
+    checkRadius: 0
+    checkRotation: {x: 0, y: 0}
+    checkScale: {x: 0, y: 0}
+  - conditionType: 1
+    targetFeatureId: 
+    targetFeatureType: 1
+    checkRadius: 0
+    checkRotation: {x: 0, y: 0}
+    checkScale: {x: 0, y: 0}
+  - conditionType: 1
+    targetFeatureId: 
+    targetFeatureType: 1
+    checkRadius: 0
+    checkRotation: {x: 0, y: 0}
+    checkScale: {x: 0, y: 0}
+  - conditionType: 1
+    targetFeatureId: 
+    targetFeatureType: 1
     checkRadius: 0
     checkRotation: {x: 0, y: 0}
     checkScale: {x: 0, y: 0}

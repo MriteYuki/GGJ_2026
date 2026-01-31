@@ -24,10 +24,6 @@ namespace GGJ2026
         [SerializeField] private FeatureType featureType;
         [SerializeField] private string featureID;
 
-        [Header("变换属性")]
-        [SerializeField] private Vector3 position;
-        [SerializeField] private Vector3 scale;
-        [SerializeField] private Quaternion rotation;
 
         /// <summary>
         /// 面部特征类型
@@ -52,8 +48,7 @@ namespace GGJ2026
         /// </summary>
         public Vector3 Position
         {
-            get => position;
-            set => position = value;
+            get => transform.localPosition;
         }
 
         /// <summary>
@@ -61,8 +56,7 @@ namespace GGJ2026
         /// </summary>
         public Vector3 Scale
         {
-            get => scale;
-            set => scale = value;
+            get => transform.localScale;
         }
 
         /// <summary>
@@ -70,8 +64,7 @@ namespace GGJ2026
         /// </summary>
         public Quaternion Rotation
         {
-            get => rotation;
-            set => rotation = value;
+            get => transform.localRotation;
         }
 
         /// <summary>
@@ -79,10 +72,7 @@ namespace GGJ2026
         /// </summary>
         public Feature()
         {
-            featureID = System.Guid.NewGuid().ToString();
-            position = Vector3.zero;
-            scale = Vector3.one;
-            rotation = Quaternion.identity;
+            featureID = string.Empty;
         }
 
         /// <summary>
@@ -93,22 +83,7 @@ namespace GGJ2026
         public Feature(FeatureType type, string id = null)
         {
             featureType = type;
-            featureID = id ?? System.Guid.NewGuid().ToString();
-            position = Vector3.zero;
-            scale = Vector3.one;
-            rotation = Quaternion.identity;
-        }
-
-        /// <summary>
-        /// 完整参数的构造函数
-        /// </summary>
-        public Feature(FeatureType type, Vector3 position, Vector3 scale, Quaternion rotation, string id = null)
-        {
-            featureType = type;
-            featureID = id ?? System.Guid.NewGuid().ToString();
-            this.position = position;
-            this.scale = scale;
-            this.rotation = rotation;
+            featureID = id ?? string.Empty;
         }
 
         /// <summary>
@@ -116,8 +91,7 @@ namespace GGJ2026
         /// </summary>
         public Vector3 EulerAngles
         {
-            get => rotation.eulerAngles;
-            set => rotation = Quaternion.Euler(value);
+            get => Rotation.eulerAngles;
         }
 
         /// <summary>
@@ -125,33 +99,7 @@ namespace GGJ2026
         /// </summary>
         public Matrix4x4 GetTransformMatrix()
         {
-            return Matrix4x4.TRS(position, rotation, scale);
-        }
-
-        /// <summary>
-        /// 应用变换到Transform组件
-        /// </summary>
-        public void ApplyToTransform(Transform targetTransform)
-        {
-            if (targetTransform != null)
-            {
-                targetTransform.position = position;
-                targetTransform.localScale = scale;
-                targetTransform.rotation = rotation;
-            }
-        }
-
-        /// <summary>
-        /// 从Transform组件获取数据
-        /// </summary>
-        public void SetFromTransform(Transform sourceTransform)
-        {
-            if (sourceTransform != null)
-            {
-                position = sourceTransform.position;
-                scale = sourceTransform.localScale;
-                rotation = sourceTransform.rotation;
-            }
+            return Matrix4x4.TRS(Position, Rotation, Scale);
         }
 
         /// <summary>
@@ -159,12 +107,12 @@ namespace GGJ2026
         /// </summary>
         public Feature Copy()
         {
-            return new Feature(featureType, position, scale, rotation, featureID + "_copy");
+            return new(featureType, featureID);
         }
 
         public override string ToString()
         {
-            return $"Feature {{Type: {featureType}, ID: {featureID}, Position: {position}, Scale: {scale}, Rotation: {rotation.eulerAngles}}}";
+            return $"Feature {{Type: {featureType}, ID: {featureID}, Position: {Position}, Scale: {Scale}, Rotation: {Rotation.eulerAngles}}}";
         }
     }
 }

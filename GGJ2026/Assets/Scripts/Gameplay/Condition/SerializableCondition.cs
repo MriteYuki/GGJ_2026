@@ -19,7 +19,7 @@ namespace GGJ2026.Gameplay.Condition
         [Header("类型查找条件")]
         [SerializeField] private FeatureType targetFeatureType;
 
-        [Header("比较设置")]
+        [SerializeField] private Vector2 checkPosition;
         [SerializeField] private float checkRadius;
         [SerializeField] private Vector2 checkRotation;
         [SerializeField] private Vector2 checkScale;
