@@ -72,6 +72,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Face50
       objectReference: {fileID: 0}
+    - target: {fileID: 8838265666979814979, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
+      propertyPath: m_Size.x
+      value: 1.9897661
+      objectReference: {fileID: 0}
+    - target: {fileID: 8838265666979814979, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
+      propertyPath: m_Size.y
+      value: 2.7185493
+      objectReference: {fileID: 0}
+    - target: {fileID: 8838265666979814979, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
+      propertyPath: m_Center.x
+      value: -0.02215898
+      objectReference: {fileID: 0}
+    - target: {fileID: 8838265666979814979, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
+      propertyPath: m_Center.y
+      value: 0.012310445
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

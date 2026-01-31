@@ -10,9 +10,32 @@ public class SceneFlowConfigEditor : Editor
     private bool showDebugInfo = false;
     private Vector2 scrollPosition;
 
+    void OnEnable()
+    {
+        config = target as SceneFlowConfig;
+        
+        // 安全检查
+        if (config == null)
+        {
+            Debug.LogError("SceneFlowConfigEditor: 目标对象为null");
+            return;
+        }
+    }
+
+    void OnDisable()
+    {
+        // 清理资源，防止空引用异常
+        config = null;
+    }
+
     public override void OnInspectorGUI()
     {
-        config = (SceneFlowConfig)target;
+        // 安全检查
+        if (config == null || serializedObject == null)
+        {
+            EditorGUILayout.HelpBox("配置对象为空或序列化对象不可用", MessageType.Error);
+            return;
+        }
         
         serializedObject.Update();
         

@@ -17,8 +17,9 @@ MonoBehaviour:
   - chainName: "\u6D41\u7A0B\u94FE1"
     sceneSequence:
     - GameStart
-    - Level_Test
+    - Level1
+    - Level2
   - chainName: "\u6D41\u7A0B\u94FE2"
     sceneSequence:
     - GameStart
-    - TestScene
+    - Level2

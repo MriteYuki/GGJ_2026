@@ -65,7 +65,6 @@ namespace GGJ2026.Gameplay
 
         // 流程配置状态
         private SceneFlowChain currentFlowChain;
-        private string selectedFirstLevel;
 
         // 场景加载进度事件
         public delegate void SceneLoadProgress(float progress);
@@ -105,6 +104,8 @@ namespace GGJ2026.Gameplay
         void OnEnable()
         {
             SceneManager.sceneLoaded += OnSceneLoaded;
+
+            LoadStartGame();
         }
 
         void OnDisable()
@@ -125,13 +126,30 @@ namespace GGJ2026.Gameplay
         }
 
         /// <summary>
-        /// 加载指定关卡场景
+        /// 获取当前场景的下一个场景
         /// </summary>
-        /// <param name="levelNumber">关卡编号</param>
-        public void LoadLevel(int levelNumber)
+        public string GetNextScene(string currentScene)
         {
-            string levelSceneName = $"Level{levelNumber}";
-            LoadScene(levelSceneName);
+            return currentFlowChain?.GetNextScene(currentScene);
+        }
+
+        /// <summary>
+        /// 检查是否为最终关卡
+        /// </summary>
+        public bool IsLastScene(string sceneName)
+        {
+            return currentFlowChain?.IsLastScene(sceneName) ?? false;
+        }
+
+        /// <summary>
+        /// 获取场景在流程中的位置信息
+        /// </summary>
+        public string GetScenePositionInfo(string sceneName)
+        {
+            if (currentFlowChain == null) return "未知流程";
+
+            int position = currentFlowChain.GetScenePosition(sceneName);
+            return $"{currentFlowChain.chainName} 第{position}关/共{currentFlowChain.TotalScenes}关";
         }
 
         /// <summary>
@@ -227,12 +245,10 @@ namespace GGJ2026.Gameplay
                 return;
             }
 
-            selectedFirstLevel = currentFlowChain.FirstLevel;
-
             if (debugMode)
             {
                 Debug.Log($"随机选择流程链: {currentFlowChain.chainName}");
-                Debug.Log($"首关场景: {selectedFirstLevel}");
+                Debug.Log($"首关场景: {currentFlowChain.FirstLevel}");
                 Debug.Log($"最终关卡: {currentFlowChain.FinalLevel}");
             }
 
@@ -250,7 +266,7 @@ namespace GGJ2026.Gameplay
                 return;
             }
 
-            string nextScene = sceneFlowConfig.GetNextScene(currentScene);
+            string nextScene = GetNextScene(currentScene);
             if (!string.IsNullOrEmpty(nextScene))
             {
                 LoadScene(nextScene);
@@ -264,7 +280,7 @@ namespace GGJ2026.Gameplay
                 }
                 else
                 {
-                    LoadScene("MainMenu");
+                    LoadScene("GameStart");
                 }
             }
         }
@@ -305,7 +321,7 @@ namespace GGJ2026.Gameplay
         /// <summary>
         /// 下一个场景名称（基于流程配置）
         /// </summary>
-        public string NextScene => sceneFlowConfig?.GetNextScene(currentScene);
+        public string NextScene => GetNextScene(currentScene);
 
         /// <summary>
         /// 是否有下一个场景
@@ -313,19 +329,19 @@ namespace GGJ2026.Gameplay
         public bool HasNextScene => !string.IsNullOrEmpty(NextScene);
 
         /// <summary>
+        /// 是否是最终关卡
+        /// </summary>
+        public bool IsFinalLevel => IsLastScene(currentScene);
+
+        /// <summary>
         /// 当前流程链名称
         /// </summary>
         public string CurrentChainName => currentFlowChain?.chainName;
 
         /// <summary>
-        /// 是否为最终关卡
-        /// </summary>
-        public bool IsFinalLevel => sceneFlowConfig?.IsFinalLevel(currentScene) ?? false;
-
-        /// <summary>
         /// 当前场景在流程中的位置信息
         /// </summary>
-        public string CurrentScenePositionInfo => sceneFlowConfig?.GetScenePositionInfo(currentScene) ?? "未知位置";
+        public string CurrentScenePositionInfo => GetScenePositionInfo(currentScene) ?? "未知位置";
 
         /// <summary>
         /// 当前流程链的总关卡数
@@ -416,24 +432,6 @@ namespace GGJ2026.Gameplay
             // 更新场景记录
             previousScene = currentScene;
             currentScene = scene.name;
-
-            // 更新流程配置状态
-            if (sceneFlowConfig != null)
-            {
-                // 如果当前场景属于某个流程链，更新当前流程链
-                var newChain = sceneFlowConfig.GetChainByScene(currentScene);
-                if (newChain != null)
-                {
-                    currentFlowChain = newChain;
-                }
-
-                // 如果是起始场景，重置流程状态
-                if (currentScene == sceneFlowConfig.startScene)
-                {
-                    currentFlowChain = null;
-                    selectedFirstLevel = null;
-                }
-            }
 
             if (debugMode)
             {

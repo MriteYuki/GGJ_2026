@@ -91,48 +91,6 @@ namespace GGJ2026.Gameplay
         }
 
         /// <summary>
-        /// 根据场景名称获取所属的流程链
-        /// </summary>
-        public SceneFlowChain GetChainByScene(string sceneName)
-        {
-            foreach (var chain in sceneFlowChains)
-            {
-                if (chain.ContainsScene(sceneName)) return chain;
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// 获取当前场景的下一个场景
-        /// </summary>
-        public string GetNextScene(string currentScene)
-        {
-            var chain = GetChainByScene(currentScene);
-            return chain?.GetNextScene(currentScene);
-        }
-
-        /// <summary>
-        /// 检查是否为最终关卡
-        /// </summary>
-        public bool IsFinalLevel(string sceneName)
-        {
-            var chain = GetChainByScene(sceneName);
-            return chain?.IsLastScene(sceneName) ?? false;
-        }
-
-        /// <summary>
-        /// 获取场景在流程中的位置信息
-        /// </summary>
-        public string GetScenePositionInfo(string sceneName)
-        {
-            var chain = GetChainByScene(sceneName);
-            if (chain == null) return "未知流程";
-
-            int position = chain.GetScenePosition(sceneName);
-            return $"{chain.chainName} 第{position}关/共{chain.TotalScenes}关";
-        }
-
-        /// <summary>
         /// 验证场景配置的有效性
         /// </summary>
         public bool ValidateConfig()

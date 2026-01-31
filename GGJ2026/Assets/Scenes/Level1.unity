@@ -706,7 +706,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: bdb899349d18e96449bb1934699145b2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -829,7 +829,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6367520295395728015, guid: c351f69e17726024db30124b366bafad, type: 3}
       propertyPath: m_LocalScale.x
-      value: -1
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6367520295395728015, guid: c351f69e17726024db30124b366bafad, type: 3}
       propertyPath: m_LocalPosition.x
@@ -837,7 +837,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6367520295395728015, guid: c351f69e17726024db30124b366bafad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.75
+      value: 0.37
       objectReference: {fileID: 0}
     - target: {fileID: 6367520295395728015, guid: c351f69e17726024db30124b366bafad, type: 3}
       propertyPath: m_LocalPosition.z
@@ -872,8 +872,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7030751153464601250, guid: c351f69e17726024db30124b366bafad, type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7030751153464601250, guid: c351f69e17726024db30124b366bafad, type: 3}
       propertyPath: m_SortingOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1396,7 +1400,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7030751153464601250, guid: 428a541e441bc27448634632a3c0c2a4, type: 3}
       propertyPath: m_SortingOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1567,8 +1571,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7030751153464601250, guid: 428a541e441bc27448634632a3c0c2a4, type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7030751153464601250, guid: 428a541e441bc27448634632a3c0c2a4, type: 3}
       propertyPath: m_SortingOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2238,11 +2246,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6367520295395728015, guid: c351f69e17726024db30124b366bafad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.99
+      value: -0.93
       objectReference: {fileID: 0}
     - target: {fileID: 6367520295395728015, guid: c351f69e17726024db30124b366bafad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.7
+      value: 0.37
       objectReference: {fileID: 0}
     - target: {fileID: 6367520295395728015, guid: c351f69e17726024db30124b366bafad, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2278,7 +2286,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7030751153464601250, guid: c351f69e17726024db30124b366bafad, type: 3}
       propertyPath: m_SortingOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
