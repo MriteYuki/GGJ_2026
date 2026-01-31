@@ -187,9 +187,9 @@ namespace GGJ2026
 
             Vector3 newScale = scaleType switch
             {
-                ScaleType.Small => Vector2.one * 0.5f,
+                ScaleType.Small => Vector2.one * 0.7f,
                 ScaleType.Medium => Vector2.one,
-                ScaleType.Large => Vector2.one * 2f,
+                ScaleType.Large => Vector2.one * 1.4f,
                 _ => Vector2.one
             };
 
