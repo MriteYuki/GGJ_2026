@@ -17,7 +17,9 @@ namespace GGJ2026.Gameplay.Condition
 
         [Header("类型查找条件")]
         [SerializeField] private FeatureType targetFeatureType;
-
+        [SerializeField] private bool enablePosition = true;
+        [SerializeField] private bool enableRotation = true;
+        [SerializeField] private bool enableScale = true;
         [SerializeField] private Vector2 checkPosition;
         [SerializeField] private float checkRadius;
         [SerializeField] private RotationType checkRotation;
@@ -70,7 +72,8 @@ namespace GGJ2026.Gameplay.Condition
             }
 
             condition.CompareFeature = features;
-            condition.Set(checkPosition, checkRadius, checkRotation, checkScale);
+            condition.Set(enablePosition, enableRotation, enableScale,
+                checkPosition, checkRadius, checkRotation, checkScale);
 
             return condition;
         }

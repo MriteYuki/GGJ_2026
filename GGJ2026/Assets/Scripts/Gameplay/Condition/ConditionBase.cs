@@ -10,6 +10,15 @@ namespace GGJ2026.Gameplay.Condition
         [Header("比较对象")]
         [SerializeField] protected Feature compareFeature;
 
+        [SerializeField]
+        protected bool enablePosition;
+
+        [SerializeField]
+        protected bool enableRotation;
+
+        [SerializeField]
+        protected bool enableScale;
+
         [Header("比较设置")]
         [Header("检测位置-相对位置")]
         [SerializeField] protected Vector2 checkPosition;
@@ -37,8 +46,12 @@ namespace GGJ2026.Gameplay.Condition
         /// <summary>
         /// 设置比较参数
         /// </summary>
-        public void Set(Vector2 checkPosition, float checkRadius, RotationType checkRotation, ScaleType checkScale)
+        public void Set(bool enablePosition, bool enableRotation, bool enableScale,
+                        Vector2 checkPosition, float checkRadius, RotationType checkRotation, ScaleType checkScale)
         {
+            this.enablePosition = enablePosition;
+            this.enableRotation = enableRotation;
+            this.enableScale = enableScale;
             this.checkPosition = checkPosition;
             this.checkRadius = checkRadius;
             this.checkRotation = checkRotation;
@@ -57,6 +70,9 @@ namespace GGJ2026.Gameplay.Condition
         /// <returns>是否在范围内</returns>
         protected bool CheckPositionRadius()
         {
+            if (!enablePosition)
+                return true;
+
             if (compareFeature == null)
                 return false;
 
@@ -70,6 +86,9 @@ namespace GGJ2026.Gameplay.Condition
         /// <returns>是否在范围内</returns>
         protected bool CheckRotation()
         {
+            if (!enableRotation)
+                return true;
+
             if (compareFeature == null)
                 return false;
 
@@ -82,6 +101,9 @@ namespace GGJ2026.Gameplay.Condition
         /// <returns>是否在范围内</returns>
         protected bool CheckScale()
         {
+            if (!enableScale)
+                return true;
+
             if (compareFeature == null)
                 return false;
 

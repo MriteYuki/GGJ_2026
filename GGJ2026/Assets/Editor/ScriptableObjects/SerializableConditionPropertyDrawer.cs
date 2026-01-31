@@ -18,6 +18,9 @@ namespace GGJ2026.Gameplay.Condition
             var conditionTypeProp = property.FindPropertyRelative("conditionType");
             var targetFeatureIdProp = property.FindPropertyRelative("targetFeatureId");
             var targetFeatureTypeProp = property.FindPropertyRelative("targetFeatureType");
+            var enablePositionProp = property.FindPropertyRelative("enablePosition");
+            var enableRotationProp = property.FindPropertyRelative("enableRotation");
+            var enableScaleProp = property.FindPropertyRelative("enableScale");
             var checkPositionProp = property.FindPropertyRelative("checkPosition");
             var checkRadiusProp = property.FindPropertyRelative("checkRadius");
             var checkRotationProp = property.FindPropertyRelative("checkRotation");
@@ -68,6 +71,21 @@ namespace GGJ2026.Gameplay.Condition
 
                 // 比较设置字段
                 currentRect.y = position.y + yOffset;
+                currentRect.height = EditorGUI.GetPropertyHeight(enablePositionProp);
+                EditorGUI.PropertyField(currentRect, enablePositionProp);
+                yOffset += currentRect.height + spacing;
+
+                currentRect.y = position.y + yOffset;
+                currentRect.height = EditorGUI.GetPropertyHeight(enableRotationProp);
+                EditorGUI.PropertyField(currentRect, enableRotationProp);
+                yOffset += currentRect.height + spacing;
+
+                currentRect.y = position.y + yOffset;
+                currentRect.height = EditorGUI.GetPropertyHeight(enableScaleProp);
+                EditorGUI.PropertyField(currentRect, enableScaleProp);
+                yOffset += currentRect.height + spacing;
+
+                currentRect.y = position.y + yOffset;
                 currentRect.height = EditorGUI.GetPropertyHeight(checkPositionProp);
                 EditorGUI.PropertyField(currentRect, checkPositionProp);
                 yOffset += currentRect.height + spacing;
@@ -99,6 +117,9 @@ namespace GGJ2026.Gameplay.Condition
             var conditionTypeProp = property.FindPropertyRelative("conditionType");
             var targetFeatureIdProp = property.FindPropertyRelative("targetFeatureId");
             var targetFeatureTypeProp = property.FindPropertyRelative("targetFeatureType");
+            var enablePositionProp = property.FindPropertyRelative("enablePosition");
+            var enableRotationProp = property.FindPropertyRelative("enableRotation");
+            var enableScaleProp = property.FindPropertyRelative("enableScale");
             var checkPositionProp = property.FindPropertyRelative("checkPosition");
             var checkRadiusProp = property.FindPropertyRelative("checkRadius");
             var checkRotationProp = property.FindPropertyRelative("checkRotation");
@@ -127,6 +148,10 @@ namespace GGJ2026.Gameplay.Condition
 
             // 添加比较设置字段高度
             height += lineHeight + spacing; // "比较设置"标题
+            height += EditorGUI.GetPropertyHeight(enablePositionProp) + spacing;
+            height += EditorGUI.GetPropertyHeight(enableRotationProp) + spacing;
+            height += EditorGUI.GetPropertyHeight(enableScaleProp) + spacing;
+            height += EditorGUI.GetPropertyHeight(enableScaleProp) + spacing;
             height += EditorGUI.GetPropertyHeight(checkPositionProp) + spacing;
             height += EditorGUI.GetPropertyHeight(checkRadiusProp) + spacing;
             height += EditorGUI.GetPropertyHeight(checkRotationProp) + spacing;
