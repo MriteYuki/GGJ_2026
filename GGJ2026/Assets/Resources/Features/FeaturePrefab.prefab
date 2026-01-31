@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8865515583871516861}
   - component: {fileID: 8838265666979814979}
   m_Layer: 0
-  m_Name: Eye_00
+  m_Name: FeaturePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,7 +80,7 @@ SpriteRenderer:
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 2
+  m_DrawMode: 0
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
