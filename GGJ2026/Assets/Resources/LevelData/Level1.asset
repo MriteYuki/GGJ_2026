@@ -13,23 +13,13 @@ MonoBehaviour:
   m_Name: Level1
   m_EditorClassIdentifier: 
   serializableConditions:
-  - conditionType: 1
-    targetFeatureId: 
+  - conditionType: 0
+    targetFeatureId: 30
     targetFeatureType: 0
     enablePosition: 1
     enableRotation: 1
     enableScale: 1
     checkPosition: {x: -1.73, y: 1.12}
-    checkRadius: 2
-    checkRotation: 0
-    checkScale: 0
-  - conditionType: 0
-    targetFeatureId: 1
-    targetFeatureType: 0
-    enablePosition: 1
-    enableRotation: 1
-    enableScale: 1
-    checkPosition: {x: 1.47, y: 1.08}
-    checkRadius: 2
-    checkRotation: 0
-    checkScale: 0
+    checkRadius: 1
+    checkRotation: 1
+    checkScale: 2
