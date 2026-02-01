@@ -8,9 +8,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 728542539562403868, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 8.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 728542539562403868, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 10.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 3881836726442648910, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
+      propertyPath: name
+      value: "\u6CA7\u6851\u8138"
+      objectReference: {fileID: 0}
     - target: {fileID: 3881836726442648910, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
       propertyPath: featureID
       value: 54
+      objectReference: {fileID: 0}
+    - target: {fileID: 3881836726442648910, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
+      propertyPath: description
+      value: "\u9971\u7ECF\u98CE\u971C\uFF0C\u8270\u96BE\u7684\u4E00\u5E74"
       objectReference: {fileID: 0}
     - target: {fileID: 3881836726442648910, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
       propertyPath: featureType
@@ -19,7 +35,7 @@ PrefabInstance:
     - target: {fileID: 6109011199218342557, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 14fac35c63f7bb649a6e09e95fef7bda, type: 3}
+      objectReference: {fileID: 21300000, guid: 3bbf8513be0a9ec469d94454f71ee675, type: 3}
     - target: {fileID: 6109011199218342557, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
       propertyPath: m_Color.b
       value: 1

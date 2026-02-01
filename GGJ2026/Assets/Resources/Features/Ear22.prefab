@@ -869,8 +869,16 @@ PrefabInstance:
       value: -0.57142854
       objectReference: {fileID: 0}
     - target: {fileID: 3881836726442648910, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
+      propertyPath: name
+      value: "\u6536\u97F3\u8033\u6735"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3881836726442648910, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
       propertyPath: featureID
       value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 3881836726442648910, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
+      propertyPath: description
+      value: "\u6536\u542C\u5404\u4E2A\u65B9\u5411\u7684\u4EA4\u8C08"
       objectReference: {fileID: 0}
     - target: {fileID: 3881836726442648910, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
       propertyPath: featureType

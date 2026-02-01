@@ -1853,8 +1853,16 @@ PrefabInstance:
       value: -0.50857145
       objectReference: {fileID: 0}
     - target: {fileID: 3881836726442648910, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
+      propertyPath: name
+      value: "\u9F3B\u5B50"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3881836726442648910, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
       propertyPath: featureID
       value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 3881836726442648910, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
+      propertyPath: description
+      value: "\u4EBA\u7C7B\u7684\u9F3B\u5B50"
       objectReference: {fileID: 0}
     - target: {fileID: 3881836726442648910, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
       propertyPath: featureType
