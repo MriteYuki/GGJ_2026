@@ -14,8 +14,132 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serializableConditions:
   - conditionType: 1
-    targetFeatureId: 
-    targetFeatureType: 4
-    checkRadius: 0
-    checkRotation: {x: 0, y: 0}
-    checkScale: {x: 0, y: 0}
+    targetFeatureId: 22
+    targetFeatureType: 0
+    enablePosition: 1
+    enableRotation: 0
+    enableScale: 0
+    checkPosition: {x: -4.9, y: 1.6}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 2
+  - conditionType: 1
+    targetFeatureId: 22
+    targetFeatureType: 0
+    enablePosition: 1
+    enableRotation: 0
+    enableScale: 0
+    checkPosition: {x: -3.1, y: 1.5}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 2
+  - conditionType: 0
+    targetFeatureId: 21
+    targetFeatureType: 1
+    enablePosition: 1
+    enableRotation: 0
+    enableScale: 0
+    checkPosition: {x: -6, y: 1.25}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 0
+    targetFeatureId: 21
+    targetFeatureType: 1
+    enablePosition: 1
+    enableRotation: 0
+    enableScale: 0
+    checkPosition: {x: -2.1, y: 1.25}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 0
+    targetFeatureId: 32
+    targetFeatureType: 3
+    enablePosition: 1
+    enableRotation: 0
+    enableScale: 0
+    checkPosition: {x: -4, y: -0.2}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 0
+    targetFeatureId: 41
+    targetFeatureType: 2
+    enablePosition: 1
+    enableRotation: 0
+    enableScale: 1
+    checkPosition: {x: -4, y: 0.88}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 0
+  - conditionType: 0
+    targetFeatureId: 51
+    targetFeatureType: 2
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -4, y: 1.62}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 2
+    targetFeatureId: 22
+    targetFeatureType: 2
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -6, y: 1.25}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 2
+    targetFeatureId: 22
+    targetFeatureType: 2
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -2.1, y: 1.25}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 2
+    targetFeatureId: 10
+    targetFeatureType: 2
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -4.9, y: 1.6}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 2
+    targetFeatureId: 10
+    targetFeatureType: 2
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -3.1, y: 1.5}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 2
+    targetFeatureId: 40
+    targetFeatureType: 2
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -4, y: 0.88}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 2
+    targetFeatureId: 33
+    targetFeatureType: 2
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -4, y: -0.2}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1

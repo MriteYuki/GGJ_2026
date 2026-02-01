@@ -1282,7 +1282,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3881836726442648910, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
       propertyPath: description
-      value: "\u5FAA\u73AF\u64AD\u653E\u97F3\u91CF\u5927"
+      value: "\u4E2D\u95F4\u6709\u6839\u820C\u5934\uFF0C\u5FAA\u73AF\u64AD\u653E\u97F3\u91CF\u5927"
       objectReference: {fileID: 0}
     - target: {fileID: 3881836726442648910, guid: c76e5f5889e42834fb1a237cbaa1b625, type: 3}
       propertyPath: featureType

@@ -63,3 +63,23 @@ MonoBehaviour:
     checkRadius: 1
     checkRotation: 0
     checkScale: 1
+  - conditionType: 2
+    targetFeatureId: 30
+    targetFeatureType: 2
+    enablePosition: 1
+    enableRotation: 0
+    enableScale: 0
+    checkPosition: {x: -4, y: -0.2}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 2
+    targetFeatureId: 50
+    targetFeatureType: 2
+    enablePosition: 1
+    enableRotation: 0
+    enableScale: 0
+    checkPosition: {x: -4, y: 1.62}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
