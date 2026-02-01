@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace GGJ2026
 {
@@ -46,7 +47,7 @@ namespace GGJ2026
             mainCamera = Camera.main;
 
             // 检查关键组件是否存在
-            Collider collider = GetComponent<Collider>();
+            Collider2D collider = GetComponent<Collider2D>();
             if (collider == null)
             {
                 Debug.LogError($"物体 {gameObject.name} 缺少Collider组件，射线检测将失败！请添加Collider组件。");
@@ -91,6 +92,11 @@ namespace GGJ2026
             }
         }
 
+        void OnMouseDown()
+        {
+            isDragging = true;
+        }
+
         void OnMouseDrag()
         {
             // 拖拽移动
@@ -98,6 +104,11 @@ namespace GGJ2026
             {
                 PerformDragMovement();
             }
+        }
+
+        private void OnMouseUp()
+        {
+            isDragging = false;
         }
 
         #endregion
@@ -121,21 +132,6 @@ namespace GGJ2026
             isSelected = false;
             isDragging = false;
             OnSelectionChanged();
-        }
-
-        /// <summary>
-        /// 切换选择状态
-        /// </summary>
-        public void ToggleSelection()
-        {
-            if (isSelected)
-            {
-                Deselect();
-            }
-            else
-            {
-                Select();
-            }
         }
 
         /// <summary>
@@ -208,58 +204,53 @@ namespace GGJ2026
 
         private void HandleSelection()
         {
-            // 处理选择逻辑（选择键按下）
-            if (Input.GetKeyDown(selectKey))
+            // 安全检查
+            if (mainCamera == null)
             {
-                // 安全检查
-                if (mainCamera == null)
-                {
-                    Debug.LogWarning("Main camera not found, selection disabled");
-                    return;
-                }
+                Debug.LogWarning("Main camera not found, selection disabled");
+                return;
+            }
 
-                // 执行射线检测（简化版本，避免复杂问题）
-                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
+            // 执行射线检测（简化版本，避免复杂问题）
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 mousePos2D = new Vector2(mouseWorldPos.x, mouseWorldPos.y);
 
-                // 使用最简单的射线检测，排除所有可能的干扰
-                bool raycastHit = Physics.Raycast(ray, out hit, Mathf.Infinity);
+            // 使用最简单的射线检测，排除所有可能的干扰
+            RaycastHit2D raycastHit = Physics2D.Raycast(mousePos2D, Vector2.zero);
 
-                // 调试信息
-                if (raycastHit)
-                {
-                    Debug.Log($"射线命中: {hit.collider.gameObject.name} (Layer: {hit.collider.gameObject.layer})");
-                }
-                else
-                {
-                    Debug.Log("射线未命中任何物体");
-                }
+            // 调试信息
+            if (raycastHit)
+            {
+                Debug.Log($"射线命中: {raycastHit.collider.gameObject.name} (Layer: {raycastHit.collider.gameObject.layer})");
+            }
+            else
+            {
+                Debug.Log("射线未命中任何物体");
+            }
 
-                bool clickedThisObject = raycastHit && hit.collider != null && hit.collider.gameObject == gameObject;
+            bool clickedThisObject = raycastHit && raycastHit.collider != null && raycastHit.collider.gameObject == gameObject;
 
-                // 处理选择状态变化
-                if (clickedThisObject)
+            // 处理选择状态变化
+            if (clickedThisObject)
+            {
+                // 点击了本物体 -> 切换选择状态
+                if (!isSelected)
                 {
-                    // 点击了本物体 -> 切换选择状态
-                    if (!isSelected)
-                    {
-                        Select();
-                    }
-                    // 如果已经选中，保持选中状态（不取消选择）
+                    Select();
                 }
-                else if (isSelected)
-                {
-                    // 点击了空白处且当前已选中 -> 取消选择
-                    Deselect();
-                }
+                // 如果已经选中，保持选中状态（不取消选择）
+            }
+            else if (isSelected && !isDragging)
+            {
+                // 点击了空白处且当前已选中且未拖拽 -> 取消选择
+                Deselect();
             }
         }
 
         private void HandleTransformOperations()
         {
-            var feature = GetComponent<Feature>();
-
-            if (feature == null)
+            
+            if (!TryGetComponent<Feature>(out var feature))
             {
                 Debug.LogWarning("Feature not found, transform operations disabled");
                 return;

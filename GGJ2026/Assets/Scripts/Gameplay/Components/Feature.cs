@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 namespace GGJ2026
@@ -52,6 +53,8 @@ namespace GGJ2026
         [SerializeField] private RotationType rotationType = RotationType.North;
 
         [SerializeField] private ScaleType scaleType = ScaleType.Medium;
+
+        [SerializeField, TextArea(3, 10)] private string description;
 
 
         /// <summary>

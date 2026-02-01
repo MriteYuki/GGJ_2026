@@ -19,7 +19,3 @@ MonoBehaviour:
     - GameStart
     - Level1
     - Level2
-  - chainName: "\u6D41\u7A0B\u94FE2"
-    sceneSequence:
-    - GameStart
-    - Level2
