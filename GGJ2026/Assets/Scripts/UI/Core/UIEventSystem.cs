@@ -20,11 +20,12 @@ namespace GGJ2026.UI
                 {
                     var go = new GameObject("UIEventSystem");
                     instance = go.AddComponent<UIEventSystem>();
-                    DontDestroyOnLoad(go);
                 }
                 return instance;
             }
         }
+
+        public static bool IsExist => instance != null;
         
         void Awake()
         {
@@ -32,6 +33,7 @@ namespace GGJ2026.UI
             {
                 instance = this;
                 eventHandlers = new Dictionary<string, List<Action<object>>>();
+                DontDestroyOnLoad(gameObject);
             }
             else
             {
@@ -129,6 +131,8 @@ namespace GGJ2026.UI
     /// </summary>
     public static class UIEventTypes
     {
+        public const string DESC_SHOW = "desc_show";
+        public const string DESC_HIDE = "desc_hide";
         public const string BUTTON_CLICK = "button_click";
         public const string PAGE_CHANGE = "page_change";
         public const string SETTINGS_CHANGED = "settings_changed";

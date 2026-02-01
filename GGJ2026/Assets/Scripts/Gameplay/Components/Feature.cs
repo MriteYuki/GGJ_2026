@@ -54,8 +54,13 @@ namespace GGJ2026
 
         [SerializeField] private ScaleType scaleType = ScaleType.Medium;
 
+        [SerializeField] private string name;
+
         [SerializeField, TextArea(3, 10)] private string description;
 
+        public string Name => name;
+
+        public string Description => description;
 
         /// <summary>
         /// 面部特征类型

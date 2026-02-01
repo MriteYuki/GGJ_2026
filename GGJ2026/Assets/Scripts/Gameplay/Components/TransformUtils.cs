@@ -1,3 +1,5 @@
+using GGJ2026.Gameplay;
+using GGJ2026.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -122,6 +124,11 @@ namespace GGJ2026
         {
             isSelected = true;
             OnSelectionChanged();
+            
+            if(TryGetComponent<Feature>(out var feature))
+            {
+                UIEventSystem.Instance.Publish(UIEventTypes.DESC_SHOW, new ItemData(feature.Name, feature.Description));
+            }
         }
 
         /// <summary>
@@ -132,6 +139,8 @@ namespace GGJ2026
             isSelected = false;
             isDragging = false;
             OnSelectionChanged();
+
+            UIEventSystem.Instance.Publish(UIEventTypes.DESC_HIDE);
         }
 
         /// <summary>
@@ -270,10 +279,6 @@ namespace GGJ2026
             if (raycastHit)
             {
                 Debug.Log($"射线命中: {raycastHit.collider?.gameObject.name} (Layer: {raycastHit.collider?.gameObject.layer})");
-            }
-            else
-            {
-                Debug.Log("射线未命中任何物体");
             }
 
             bool clickedThisObject = raycastHit && raycastHit.collider != null && raycastHit.collider.gameObject == gameObject;
