@@ -52,32 +52,36 @@ namespace GGJ2026.Gameplay.Condition
             set => targetFeatureType = value;
         }
 
+        public LogicAndOr LogicAndOr
+        {
+            get => conditionType switch
+            {
+                ConditionType.FeatureById or ConditionType.FeatureByType => LogicAndOr.Or,
+                ConditionType.FeatureExcludeId or ConditionType.FeatureExcludeType => LogicAndOr.And,
+                _ => LogicAndOr.None
+            };
+        }
+
         /// <summary>
         /// 转换为具体的条件对象
         /// </summary>
-        public ConditionBase ToCondition(Feature features)
+        public ConditionBase ToCondition(Feature feature)
         {
-            ConditionBase condition;
-            switch (conditionType)
+            ConditionBase condition = conditionType
+            switch
             {
-                case ConditionType.FeatureById:
-                    condition = new FeatureByIdCondition(targetFeatureId);
-                    break;
-                case ConditionType.FeatureByType:
-                    condition = new FeatureByTypeCondition(targetFeatureType);
-                    break;
-                case ConditionType.FeatureExcludeId:
-                    condition = new FeatureExcludeIdCondition(targetFeatureId);
-                    break;
-                case ConditionType.FeatureExcludeType:
-                    condition = new FeatureExcludeTypeCondition(targetFeatureType);
-                    break;
-                default:
-                    condition = new ConditionBase();
-                    break;
-            }
+                ConditionType.FeatureById =>
+                        new FeatureByIdCondition(targetFeatureId),
+                ConditionType.FeatureByType =>
+                        new FeatureByTypeCondition(targetFeatureType),
+                ConditionType.FeatureExcludeId =>
+                        new FeatureExcludeIdCondition(targetFeatureId),
+                ConditionType.FeatureExcludeType =>
+                        new FeatureExcludeTypeCondition(targetFeatureType),
+                _ => new ConditionBase(),
+            };
 
-            condition.CompareFeature = features;
+            condition.CompareFeature = feature;
             condition.Set(enablePosition, enableRotation, enableScale,
                 checkPosition, checkRadius, checkRotation, checkScale);
 
@@ -103,7 +107,7 @@ namespace GGJ2026.Gameplay.Condition
             {
                 serializable.conditionType = ConditionType.FeatureExcludeId;
             }
-            else if(condition is FeatureExcludeTypeCondition excludeTypeCondition)
+            else if (condition is FeatureExcludeTypeCondition excludeTypeCondition)
             {
                 serializable.conditionType = ConditionType.FeatureExcludeType;
             }

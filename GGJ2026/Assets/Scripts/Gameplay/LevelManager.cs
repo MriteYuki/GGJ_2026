@@ -128,13 +128,31 @@ namespace GGJ2026.Gameplay
             if (serializableCondition == null)
                 return false;
 
-            foreach (var feature in allFeatures)
+            switch (serializableCondition.LogicAndOr)
             {
-                var condition = serializableCondition.ToCondition(feature);
-                if (condition == null)
-                    continue;
+                case LogicAndOr.Or:
+                    foreach (var feature in allFeatures)
+                    {
+                        var condition = serializableCondition.ToCondition(feature);
+                        if (condition == null)
+                            continue;
 
-                if (condition.Check())
+                        if (condition.Check())
+                            return true;
+                    }
+
+                    return false;
+                case LogicAndOr.And:
+                    foreach (var feature in allFeatures)
+                    {
+                        var condition = serializableCondition.ToCondition(feature);
+                        if (condition == null)
+                            continue;
+
+                        if (!condition.Check())
+                            return false;
+                    }
+
                     return true;
             }
 

@@ -5,7 +5,7 @@ namespace GGJ2026.Gameplay.Condition
     /// <summary>
     /// 按特定ID排除特征的条件
     /// </summary>
-    public class FeatureExcludeIdCondition: ConditionBase
+    public class FeatureExcludeIdCondition : ConditionBase
     {
         [SerializeField] private string featureId;
 
@@ -20,12 +20,12 @@ namespace GGJ2026.Gameplay.Condition
         public override bool Check()
         {
             // 比较目标ID的特征
-            if (compareFeature.ID == featureId)
+            if (compareFeature.ID != featureId)
             {
-                return false;
+                return true;
             }
-
-            return CheckAllParameters();
+ ;
+            return CheckPositionRadius() is false;
         }
     }
 }

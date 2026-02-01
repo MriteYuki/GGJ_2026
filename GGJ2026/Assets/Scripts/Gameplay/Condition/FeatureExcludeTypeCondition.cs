@@ -21,12 +21,12 @@ namespace GGJ2026.Gameplay.Condition
         public override bool Check()
         {
             // 比较目标Type的特征
-            if (compareFeature.Type == featureType)
+            if (compareFeature.Type != featureType)
             {
-                return false;
+                return true;
             }
 
-            return CheckAllParameters();
+            return CheckPositionRadius() is false;
         }
     }
 }
