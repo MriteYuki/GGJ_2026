@@ -238,9 +238,12 @@ namespace GGJ2026.Gameplay
             if (sceneName == "Failed")
             {
                 sfx = "FailSound";
+                AudioManager.Instance.StopMusic();
+                AudioManager.Instance.PlaySFX(sfx);
+                return;
             }
 
-            AudioManager.Instance.StopMusic();
+            AudioManager.Instance.PlayGameMusic();
             AudioManager.Instance.PlaySFX(sfx);
         }
 
