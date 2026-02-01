@@ -20,14 +20,14 @@ namespace GGJ2026
     /// </summary>
     public enum RotationType
     {
-        North,      // 0° - 北
-        Northeast,  // 45° - 东北
-        East,       // 90° - 东
-        Southeast,  // 135° - 东南
-        South,      // 180° - 南
-        Southwest,  // 225° - 西南
-        West,       // 270° - 西
-        Northwest   // 315° - 西北
+        Up,      // 0° - 北
+        UpRight,  // -45° - 东北
+        Right,       // -90° - 东
+        DownRight,  // -135° - 东南
+        Down,      // -180° - 南
+        DownLeft,  // -225° - 西南
+        Left,       // -270° - 西
+        UpLeft   // -315° - 西北
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ namespace GGJ2026
         [SerializeField] private FeatureType featureType;
         [SerializeField] private string featureID;
 
-        [SerializeField] private RotationType rotationType = RotationType.North;
+        [SerializeField] private RotationType rotationType = RotationType.Up;
 
         [SerializeField] private ScaleType scaleType = ScaleType.Medium;
 
@@ -136,21 +136,21 @@ namespace GGJ2026
         {
             var angles = rotationType switch
             {
-                RotationType.North => Vector3.zero,
+                RotationType.Up => Vector3.zero,
 
-                RotationType.Northeast => new Vector3(0, 0, -45),
+                RotationType.UpRight => new Vector3(0, 0, -45),
 
-                RotationType.East => new Vector3(0, 0, -90),
+                RotationType.Right => new Vector3(0, 0, -90),
 
-                RotationType.Southeast => new Vector3(0, 0, -135),
+                RotationType.DownRight => new Vector3(0, 0, -135),
 
-                RotationType.South => new Vector3(0, 0, -180),
+                RotationType.Down => new Vector3(0, 0, -180),
 
-                RotationType.Southwest => new Vector3(0, 0, -225),
+                RotationType.DownLeft => new Vector3(0, 0, -225),
 
-                RotationType.West => new Vector3(0, 0, -270),
+                RotationType.Left => new Vector3(0, 0, -270),
 
-                RotationType.Northwest => new Vector3(0, 0, -315),
+                RotationType.UpLeft => new Vector3(0, 0, -315),
 
                 _ => Vector3.zero
             };
