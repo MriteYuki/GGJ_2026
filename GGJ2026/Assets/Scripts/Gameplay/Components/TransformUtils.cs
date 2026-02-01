@@ -10,6 +10,10 @@ namespace GGJ2026
     /// </summary>
     public class TransformUtils : MonoBehaviour
     {
+        // 静态全局选择管理器
+        private static TransformUtils currentlySelected = null;
+        private static TransformUtils currentlyDragging = null;
+
         [Header("操作设置")]
         [SerializeField] private float moveSpeed = 10f;
         [SerializeField] private float rotateSpeed = 360f;
@@ -35,7 +39,6 @@ namespace GGJ2026
 
         // 内部状态
         private bool isSelected = false;
-        private bool isDragging = false;
         private SpriteRenderer spriteRenderer;
         private Color originalColor;
         private Camera mainCamera;
@@ -84,8 +87,23 @@ namespace GGJ2026
 
         void Update()
         {
-            // 处理选择逻辑
-            HandleSelection();
+            if (Input.GetMouseButtonUp(0))
+            {
+                currentlyDragging = null;
+            }
+
+            if (currentlyDragging != null)
+            {
+                return;
+            }
+
+            // 每帧检测鼠标悬停状态并处理选择逻辑
+            HandleSelectionLogic();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                currentlyDragging = currentlySelected;
+            }
 
             // 如果被选中，处理操作
             if (isSelected)
@@ -94,23 +112,12 @@ namespace GGJ2026
             }
         }
 
-        void OnMouseDown()
-        {
-            isDragging = true;
-        }
-
         void OnMouseDrag()
         {
-            // 拖拽移动
-            if (isSelected && enablePosition)
-            {
-                PerformDragMovement();
-            }
-        }
+            // Debug.LogError($"OnMouseDrag：{(currentlyDragging != null ? currentlyDragging.name : "null")}");
 
-        private void OnMouseUp()
-        {
-            isDragging = false;
+            // 拖拽移动 - 只有当前正在拖拽的物体才能移动
+            PerformDragMovement(currentlyDragging);
         }
 
         #endregion
@@ -122,13 +129,23 @@ namespace GGJ2026
         /// </summary>
         public void Select()
         {
+            // 取消之前选中的物体
+            if (currentlySelected != null && currentlySelected != this)
+            {
+                currentlySelected.Deselect();
+            }
+
             isSelected = true;
+            currentlySelected = this;
+
             OnSelectionChanged();
-            
-            if(TryGetComponent<Feature>(out var feature))
+
+            if (TryGetComponent<Feature>(out var feature))
             {
                 UIEventSystem.Instance.Publish(UIEventTypes.DESC_SHOW, new ItemData(feature.Name, feature.Description));
             }
+
+            // Debug.LogError($"Select {currentlySelected.name}");
         }
 
         /// <summary>
@@ -136,8 +153,13 @@ namespace GGJ2026
         /// </summary>
         public void Deselect()
         {
+            // Debug.LogError($"Deselect {currentlySelected.name}");
+
             isSelected = false;
-            isDragging = false;
+            if (currentlySelected == this)
+            {
+                currentlySelected = null;
+            }
             OnSelectionChanged();
 
             UIEventSystem.Instance.Publish(UIEventTypes.DESC_HIDE);
@@ -211,98 +233,80 @@ namespace GGJ2026
 
         #region 私有实现方法
 
-        private void HandleSelection()
+        private void HandleSelectionLogic()
         {
-            // 安全检查
-            if (mainCamera == null)
+            if (Camera.main == null)
             {
-                Debug.LogWarning("Main camera not found, selection disabled");
                 return;
             }
 
-            // 执行射线检测（简化版本，避免复杂问题）
+            // 执行射线检测
             Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 mousePos2D = new Vector2(mouseWorldPos.x, mouseWorldPos.y);
+            RaycastHit2D[] hits = Physics2D.RaycastAll(mouseWorldPos, Vector2.zero);
 
-            // 使用最简单的射线检测，排除所有可能的干扰
-            RaycastHit2D[] hits = Physics2D.RaycastAll(mousePos2D, Vector2.zero);
-            RaycastHit2D raycastHit = default;
+            // 找到最上层的可交互物体
+            TransformUtils topObject = null;
+            int highestPriority = int.MinValue;
 
-            if (hits.Length > 0)
+            foreach (var hit in hits)
             {
-                raycastHit = hits[0];
-                SpriteRenderer bestSR = null;
-                SpriteRenderer currentSR;
-
-                foreach (var hit in hits)
+                if (hit.collider != null)
                 {
-                    SpriteRenderer sr = hit.collider.GetComponent<SpriteRenderer>();
-                    if (sr)
+                    TransformUtils obj = hit.collider.GetComponent<TransformUtils>();
+                    if (obj != null)
                     {
-                        // 1. 比较 Sorting Layer (层级)
-                        // SortingLayer.GetLayerValueFromID 将 ID 转为 Inspector 里的排序权值
-                        currentSR = sr;
-                        bestSR = bestSR == null ? sr: bestSR;
-                        int currentLayerValue = SortingLayer.GetLayerValueFromID(currentSR.sortingLayerID);
-                        int bestLayerValue = SortingLayer.GetLayerValueFromID(bestSR.sortingLayerID);
+                        // 计算优先级：Sorting Layer + Sorting Order + Sibling Index
+                        SpriteRenderer sr = obj.spriteRenderer;
+                        if (sr != null)
+                        {
+                            int priority = SortingLayer.GetLayerValueFromID(sr.sortingLayerID) * 10000 +
+                                          sr.sortingOrder * 100 +
+                                          obj.transform.GetSiblingIndex();
 
-                        if (currentLayerValue > bestLayerValue)
-                        {
-                            raycastHit = hit;
-                            bestSR = currentSR;
-                        }
-                        else if (currentLayerValue == bestLayerValue)
-                        {
-                            // 2. 层级相同时，比较 Sorting Order (数字)
-                            if (currentSR.sortingOrder > bestSR.sortingOrder)
+                            if (priority > highestPriority)
                             {
-                                raycastHit = hit;
-                                bestSR = currentSR;
-                            }
-                            else if (currentSR.sortingOrder == bestSR.sortingOrder)
-                            {
-                                // 3. 数字也相同时，比较 Hierarchy 里的位置 (SiblingIndex)
-                                // 索引越大，代表在面板越靠下，即越晚渲染（遮挡上方）
-                                if (currentSR.transform.GetSiblingIndex() > bestSR.transform.GetSiblingIndex())
-                                {
-                                    raycastHit = hit;
-                                    bestSR = currentSR;
-                                }
+                                highestPriority = priority;
+                                topObject = obj;
                             }
                         }
                     }
                 }
-                Debug.Log("你真正点到的是最上层的：" + raycastHit.collider.name);
             }
 
-            // 调试信息
-            if (raycastHit)
+            // 处理选择逻辑
+            if (topObject != null)
             {
-                Debug.Log($"射线命中: {raycastHit.collider?.gameObject.name} (Layer: {raycastHit.collider?.gameObject.layer})");
-            }
-
-            bool clickedThisObject = raycastHit && raycastHit.collider != null && raycastHit.collider.gameObject == gameObject;
-
-            // 处理选择状态变化
-            if (clickedThisObject)
-            {
-                // 点击了本物体 -> 切换选择状态
-                if (!isSelected)
+                // 点击了某个可交互物体
+                if (topObject == this)
                 {
-                    Select();
+                    // 点击了本物体 -> 选择
+                    if (!isSelected)
+                    {
+                        Select();
+                    }
                 }
-                // 如果已经选中，保持选中状态（不取消选择）
+                else
+                {
+                    // 点击了其他物体 -> 取消本物体的选择
+                    if (isSelected)
+                    {
+                        Deselect();
+                    }
+                }
             }
-            else if (isSelected && !isDragging)
+            else
             {
-                // 点击了空白处且当前已选中且未拖拽 -> 取消选择
-                Deselect();
+                // 点击了空白处 -> 取消所有选择
+                if (isSelected)
+                {
+                    Deselect();
+                }
             }
         }
 
         private void HandleTransformOperations()
         {
-            
+
             if (!TryGetComponent<Feature>(out var feature))
             {
                 Debug.LogWarning("Feature not found, transform operations disabled");
@@ -331,7 +335,7 @@ namespace GGJ2026
             {
                 if (Input.GetKeyDown(rotateRightKey))
                 {
-                    var next = ((int)feature.Rotation +1) % 8;
+                    var next = ((int)feature.Rotation + 1) % 8;
                     feature.Rotation = (RotationType)next;
                     RotateBy((RotationType)next);
                 }
@@ -346,9 +350,12 @@ namespace GGJ2026
             // 拖拽操作（在OnMouseDrag中处理）
         }
 
-        private void PerformDragMovement()
+        private void PerformDragMovement(TransformUtils transformUtils)
         {
-            if (mainCamera == null) return;
+            if (mainCamera == null || transformUtils == null)
+            {
+                return;
+            }
 
             // 获取鼠标在屏幕上的位置
             Vector3 mousePosition = Input.mousePosition;
@@ -358,11 +365,11 @@ namespace GGJ2026
             mousePosition.y = Mathf.Clamp(mousePosition.y, 0, Screen.height);
 
             // 计算基于深度的世界坐标
-            float depth = mainCamera.WorldToScreenPoint(transform.position).z;
+            float depth = mainCamera.WorldToScreenPoint(transformUtils.transform.position).z;
             Vector3 targetWorldPosition = mainCamera.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, depth));
 
             // 应用移动平滑和速度控制
-            Vector3 newPosition = transform.position;
+            Vector3 newPosition = transformUtils.transform.position;
             Vector3 moveDelta = (targetWorldPosition - newPosition) * moveSpeed * Time.deltaTime;
 
             // 应用轴锁定
@@ -370,7 +377,7 @@ namespace GGJ2026
             if (!lockYAxis) newPosition.y += moveDelta.y;
             if (!lockZAxis) newPosition.z += moveDelta.z;
 
-            transform.position = newPosition;
+            currentlyDragging.transform.position = newPosition;
         }
 
         private Color GetSelectionColor()
@@ -420,11 +427,6 @@ namespace GGJ2026
         /// 是否被选中
         /// </summary>
         public bool IsSelected => isSelected;
-
-        /// <summary>
-        /// 是否正在拖拽
-        /// </summary>
-        public bool IsDragging => isDragging;
 
         /// <summary>
         /// 当前位置
