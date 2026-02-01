@@ -1,7 +1,6 @@
 using GGJ2026.Gameplay;
 using GGJ2026.UI;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace GGJ2026
 {
@@ -92,6 +91,7 @@ namespace GGJ2026
                 if (currentlyDragging != null)
                 {
                     AudioManager.Instance.PlaySFX("DropFeature");
+                    UIEventSystem.Instance.Publish(UIEventTypes.TIPS_HIDE);
                     currentlyDragging = null;
                 }
             }
@@ -109,6 +109,7 @@ namespace GGJ2026
                 if (currentlySelected != null)
                 {
                     AudioManager.Instance.PlaySFX("clickSound");
+                    UIEventSystem.Instance.Publish(UIEventTypes.TIPS_SHOW);
                 }
 
                 currentlyDragging = currentlySelected;
