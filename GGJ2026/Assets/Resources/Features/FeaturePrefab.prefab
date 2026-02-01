@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6109011199218342557}
   - component: {fileID: 3881836726442648910}
   - component: {fileID: 8865515583871516861}
-  - component: {fileID: 728542539562403868}
+  - component: {fileID: 6158517320430790981}
   m_Layer: 0
   m_Name: FeaturePrefab
   m_TagString: Untagged
@@ -134,8 +134,8 @@ MonoBehaviour:
   lockXAxis: 0
   lockYAxis: 0
   lockZAxis: 0
---- !u!60 &728542539562403868
-PolygonCollider2D:
+--- !u!61 &6158517320430790981
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -176,14 +176,6 @@ PolygonCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.08571429, y: -1.2228571}
-      - {x: -0.63142854, y: -0.73714286}
-      - {x: -1.0514286, y: 0.49714285}
-      - {x: -0.54, y: 1.2428571}
-      - {x: 0.5114286, y: 1.2342857}
-      - {x: 0.9285714, y: 0.4}
-      - {x: 0.76857144, y: -0.6142857}
-      - {x: 0.24857143, y: -1.2457143}
-  m_UseDelaunayMesh: 0
+  serializedVersion: 2
+  m_Size: {x: 2.2285714, y: 2.68}
+  m_EdgeRadius: 0
