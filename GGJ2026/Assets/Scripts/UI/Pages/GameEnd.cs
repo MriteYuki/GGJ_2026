@@ -20,6 +20,5 @@ public class GameEnd : MonoBehaviour
     private void OnGameEnd()
     {
         GameManager.Instance.LoadMainMenu();
-        AudioManager.Instance.PlaySFX("clickSound");
     }
 }

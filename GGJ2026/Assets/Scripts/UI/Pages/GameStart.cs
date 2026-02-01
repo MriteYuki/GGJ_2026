@@ -20,6 +20,5 @@ public class GameStart : MonoBehaviour
     private void OnGameStart()
     {
         GameManager.Instance.LoadNextScene();
-        AudioManager.Instance.PlaySFX("clickSound");
     }
 }

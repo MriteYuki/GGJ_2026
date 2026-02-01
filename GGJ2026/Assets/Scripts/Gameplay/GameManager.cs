@@ -198,6 +198,19 @@ namespace GGJ2026.Gameplay
                 return;
             }
 
+            var sfx = "clickSound";
+
+            if (sceneName == "Success")
+            {
+                sfx = "SuccessSound";
+            }
+            else if (sceneName == "Failed")
+            {
+                sfx = "FailSound";
+            }
+
+            AudioManager.Instance.PlaySFX(sfx);
+
             if (!SceneExists(sceneName))
             {
                 Debug.LogError($"场景不存在: {sceneName}");

@@ -286,8 +286,6 @@ namespace GGJ2026.Gameplay
         /// </summary>
         public void QuickCheck()
         {
-            AudioManager.Instance.PlaySFX("clickSound");
-
             bool passed = CheckAllConditions();
 
             if (GameManager.Instance.IsFinalLevel)
