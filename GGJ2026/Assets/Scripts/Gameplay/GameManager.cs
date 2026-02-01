@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using GGJ2026.UI;
 
 namespace GGJ2026.Gameplay
 {
@@ -12,6 +13,15 @@ namespace GGJ2026.Gameplay
     {
         public string sceneFrom;
         public string sceneTo;
+    }
+
+    [Serializable]
+    public struct TransitionData
+    {
+        public string sceneName;
+        public string currentScene;
+        public string previousScene;
+        public float progress;
     }
 
     /// <summary>
@@ -72,6 +82,21 @@ namespace GGJ2026.Gameplay
 
         public delegate void SceneTransitionComplete(string sceneName);
         public event SceneTransitionComplete OnSceneTransitionComplete;
+
+        // 场景转换事件类型
+        public static class SceneTransitionEvents
+        {
+            public const string TRANSITION_START = "transition_start";
+            public const string TRANSITION_FADE_IN_START = "transition_fade_in_start";
+            public const string TRANSITION_FADE_IN_COMPLETE = "transition_fade_in_complete";
+            public const string TRANSITION_LOADING_START = "transition_loading_start";
+            public const string TRANSITION_LOADING_PROGRESS = "transition_loading_progress";
+            public const string TRANSITION_LOADING_COMPLETE = "transition_loading_complete";
+            public const string TRANSITION_FADE_OUT_START = "transition_fade_out_start";
+            public const string TRANSITION_FADE_OUT_COMPLETE = "transition_fade_out_complete";
+            public const string TRANSITION_COMPLETE = "transition_complete";
+            public const string TRANSITION_ABORT = "transition_abort";
+        }
 
         #region Unity生命周期
 
@@ -153,7 +178,7 @@ namespace GGJ2026.Gameplay
         }
 
         /// <summary>
-        /// 加载指定名称的场景
+        /// 加载指定名称的场景（使用事件系统分发）
         /// </summary>
         /// <param name="sceneName">场景名称</param>
         public void LoadScene(string sceneName)
@@ -172,6 +197,14 @@ namespace GGJ2026.Gameplay
                 Debug.LogError($"场景不存在: {sceneName}");
                 return;
             }
+
+            // 发布场景转换开始事件
+            UIEventSystem.Instance.Publish(SceneTransitionEvents.TRANSITION_START, new TransitionData
+            {
+                sceneName = sceneName,
+                currentScene = currentScene,
+                previousScene = previousScene
+            });
 
             StartCoroutine(TransitionToScene(sceneName));
         }
@@ -203,6 +236,30 @@ namespace GGJ2026.Gameplay
         public void LoadMainMenu()
         {
             LoadScene("GameStart");
+        }
+
+        /// <summary>
+        /// 中断当前场景转换
+        /// </summary>
+        public void AbortTransition()
+        {
+            if (isTransitioning)
+            {
+                StopAllCoroutines();
+                isTransitioning = false;
+
+                // 发布转换中断事件
+                UIEventSystem.Instance.Publish(SceneTransitionEvents.TRANSITION_ABORT, new TransitionData
+                {
+                    currentScene = currentScene,
+                    previousScene = previousScene
+                });
+
+                if (debugMode)
+                {
+                    Debug.Log("场景转换已中断");
+                }
+            }
         }
 
         /// <summary>
@@ -252,7 +309,7 @@ namespace GGJ2026.Gameplay
                 Debug.Log($"最终关卡: {currentFlowChain.FinalLevel}");
             }
 
-            if(currentScene != currentFlowChain.FirstLevel)
+            if (currentScene != currentFlowChain.FirstLevel)
             {
                 LoadScene(currentFlowChain.FirstLevel);
             }
@@ -380,11 +437,35 @@ namespace GGJ2026.Gameplay
                 Debug.Log($"开始切换场景: {currentScene} -> {sceneName}");
             }
 
+            // 发布淡入开始事件
+            UIEventSystem.Instance.Publish(SceneTransitionEvents.TRANSITION_FADE_IN_START, new TransitionData
+            {
+                sceneName = sceneName,
+                currentScene = currentScene,
+                previousScene = previousScene
+            });
+
             // 触发场景切换开始事件
             OnSceneTransitionComplete?.Invoke("start");
 
-            // 等待场景切换延迟
+            // 等待场景切换延迟（模拟淡入时间）
             yield return new WaitForSeconds(sceneTransitionDelay);
+
+            // 发布淡入完成事件
+            UIEventSystem.Instance.Publish(SceneTransitionEvents.TRANSITION_FADE_IN_COMPLETE, new TransitionData
+            {
+                sceneName = sceneName,
+                currentScene = currentScene,
+                previousScene = previousScene
+            });
+
+            // 发布加载开始事件
+            UIEventSystem.Instance.Publish(SceneTransitionEvents.TRANSITION_LOADING_START, new TransitionData
+            {
+                sceneName = sceneName,
+                currentScene = currentScene,
+                previousScene = previousScene
+            });
 
             // 异步加载场景
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
@@ -396,6 +477,16 @@ namespace GGJ2026.Gameplay
             while (!asyncLoad.isDone)
             {
                 float progress = Mathf.Clamp01(asyncLoad.progress / 0.9f);
+
+                // 发布加载进度事件
+                UIEventSystem.Instance.Publish(SceneTransitionEvents.TRANSITION_LOADING_PROGRESS, new TransitionData
+                {
+                    sceneName = sceneName,
+                    currentScene = currentScene,
+                    previousScene = previousScene,
+                    progress = progress
+                });
+
                 OnSceneLoadProgress?.Invoke(progress);
 
                 if (asyncLoad.progress >= 0.9f)
@@ -407,9 +498,6 @@ namespace GGJ2026.Gameplay
                 yield return null;
             }
 
-            // 等待额外延迟后激活场景
-            yield return new WaitForSeconds(sceneTransitionDelay);
-
             // 激活新场景
             asyncLoad.allowSceneActivation = true;
 
@@ -419,12 +507,48 @@ namespace GGJ2026.Gameplay
                 yield return null;
             }
 
+
+            // 发布加载完成事件
+            UIEventSystem.Instance.Publish(SceneTransitionEvents.TRANSITION_LOADING_COMPLETE, new TransitionData
+            {
+                sceneName = sceneName,
+                currentScene = currentScene,
+                previousScene = previousScene
+            });
+
+            // 发布淡出开始事件
+            UIEventSystem.Instance.Publish(SceneTransitionEvents.TRANSITION_FADE_OUT_START, new TransitionData
+            {
+                sceneName = sceneName,
+                currentScene = currentScene,
+                previousScene = previousScene
+            });
+
+            // 等待额外延迟后激活场景（模拟淡出时间）
+            yield return new WaitForSeconds(sceneTransitionDelay);
+
+            // 发布淡出完成事件
+            UIEventSystem.Instance.Publish(SceneTransitionEvents.TRANSITION_FADE_OUT_COMPLETE, new TransitionData
+            {
+                sceneName = sceneName,
+                currentScene = currentScene,
+                previousScene = previousScene
+            });
+
             isTransitioning = false;
 
             if (debugMode)
             {
                 Debug.Log($"场景切换完成: {sceneName}");
             }
+
+            // 发布转换完成事件
+            UIEventSystem.Instance.Publish(SceneTransitionEvents.TRANSITION_COMPLETE, new TransitionData
+            {
+                sceneName = sceneName,
+                currentScene = currentScene,
+                previousScene = previousScene
+            });
 
             // 触发场景切换完成事件
             OnSceneTransitionComplete?.Invoke(sceneName);
