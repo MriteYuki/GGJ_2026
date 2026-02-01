@@ -337,24 +337,12 @@ namespace GGJ2026.Gameplay
             {
                 LoadScene(nextScene);
             }
-            else
-            {
-                // 流程结束，显示结局或回到主菜单
-                if (IsFinalLevel)
-                {
-                    ShowGameEnding();
-                }
-                else
-                {
-                    LoadScene("GameStart");
-                }
-            }
         }
 
         /// <summary>
         /// 显示游戏结局（最终关卡完成）
         /// </summary>
-        private void ShowGameEnding()
+        public void ShowGameEnding(bool isSuccess)
         {
             if (debugMode)
             {
@@ -362,7 +350,14 @@ namespace GGJ2026.Gameplay
             }
 
             // 这里可以加载结局场景或显示结局UI
-            // LoadScene("GameEnding");
+            if (isSuccess)
+            {
+                LoadScene("Success");
+            }
+            else
+            {
+                LoadScene("Failed");
+            }
         }
 
         #endregion

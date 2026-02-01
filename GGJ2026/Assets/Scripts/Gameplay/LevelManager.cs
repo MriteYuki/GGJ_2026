@@ -261,6 +261,13 @@ namespace GGJ2026.Gameplay
         public void QuickCheck()
         {
             bool passed = CheckAllConditions();
+
+            if (GameManager.Instance.IsFinalLevel)
+            {
+                GameManager.Instance.ShowGameEnding(passed);
+                return;
+            }
+
             if (passed)
             {
                 Debug.Log("<color=#FF0000>关卡通过！</color>");
