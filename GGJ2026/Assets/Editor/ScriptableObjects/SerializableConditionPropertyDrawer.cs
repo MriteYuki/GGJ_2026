@@ -48,14 +48,14 @@ namespace GGJ2026.Gameplay.Condition
                 // 根据条件类型显示相应字段
                 var conditionType = (ConditionType)conditionTypeProp.enumValueIndex;
 
-                if (conditionType == ConditionType.FeatureById)
+                if (conditionType is ConditionType.FeatureById or ConditionType.FeatureExcludeId)
                 {
                     currentRect.y = position.y + yOffset;
                     currentRect.height = EditorGUI.GetPropertyHeight(targetFeatureIdProp);
                     EditorGUI.PropertyField(currentRect, targetFeatureIdProp);
                     yOffset += currentRect.height + spacing;
                 }
-                else if (conditionType == ConditionType.FeatureByType)
+                else if (conditionType is ConditionType.FeatureByType or ConditionType.FeatureExcludeType)
                 {
                     currentRect.y = position.y + yOffset;
                     currentRect.height = EditorGUI.GetPropertyHeight(targetFeatureTypeProp);

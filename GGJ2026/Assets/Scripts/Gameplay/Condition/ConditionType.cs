@@ -6,6 +6,8 @@ namespace GGJ2026.Gameplay.Condition
     public enum ConditionType
     {
         FeatureById,
-        FeatureByType
+        FeatureByType,
+        FeatureExcludeId,
+        FeatureExcludeType,
     }
 }

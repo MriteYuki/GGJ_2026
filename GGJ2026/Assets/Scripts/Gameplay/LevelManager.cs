@@ -182,12 +182,16 @@ namespace GGJ2026.Gameplay
             public Vector3 position;
             public Quaternion rotation;
             public Vector3 scale;
+            public ScaleType scaleType;
+            public RotationType rotationType;
 
             public FeatureState(Feature feature)
             {
                 position = feature.transform.localPosition;
                 rotation = feature.transform.localRotation;
                 scale = feature.transform.localScale;
+                scaleType = feature.Scale;
+                rotationType = feature.Rotation;
             }
 
             public void ApplyTo(Feature feature)
@@ -195,6 +199,8 @@ namespace GGJ2026.Gameplay
                 feature.transform.localPosition = position;
                 feature.transform.localRotation = rotation;
                 feature.transform.localScale = scale;
+                feature.Scale = scaleType;
+                feature.Rotation = rotationType;
             }
         }
 

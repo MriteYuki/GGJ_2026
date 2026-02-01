@@ -66,6 +66,12 @@ namespace GGJ2026.Gameplay.Condition
                 case ConditionType.FeatureByType:
                     condition = new FeatureByTypeCondition(targetFeatureType);
                     break;
+                case ConditionType.FeatureExcludeId:
+                    condition = new FeatureExcludeIdCondition(targetFeatureId);
+                    break;
+                case ConditionType.FeatureExcludeType:
+                    condition = new FeatureExcludeTypeCondition(targetFeatureType);
+                    break;
                 default:
                     condition = new ConditionBase();
                     break;
@@ -93,7 +99,14 @@ namespace GGJ2026.Gameplay.Condition
             {
                 serializable.conditionType = ConditionType.FeatureByType;
             }
-
+            else if (condition is FeatureExcludeIdCondition excludeIdCondition)
+            {
+                serializable.conditionType = ConditionType.FeatureExcludeId;
+            }
+            else if(condition is FeatureExcludeTypeCondition excludeTypeCondition)
+            {
+                serializable.conditionType = ConditionType.FeatureExcludeType;
+            }
             return serializable;
         }
 
