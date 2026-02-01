@@ -11,7 +11,7 @@ namespace GGJ2026.UI
     {
         private static UIEventSystem instance;
         private Dictionary<string, List<Action<object>>> eventHandlers;
-        
+
         public static UIEventSystem Instance
         {
             get
@@ -26,7 +26,7 @@ namespace GGJ2026.UI
         }
 
         public static bool IsExist => instance != null;
-        
+
         void Awake()
         {
             if (instance == null)
@@ -40,7 +40,7 @@ namespace GGJ2026.UI
                 Destroy(gameObject);
             }
         }
-        
+
         /// <summary>
         /// 订阅事件
         /// </summary>
@@ -50,14 +50,14 @@ namespace GGJ2026.UI
             {
                 eventHandlers[eventName] = new List<Action<object>>();
             }
-            
+
             if (!eventHandlers[eventName].Contains(handler))
             {
                 eventHandlers[eventName].Add(handler);
                 Debug.Log($"事件订阅: {eventName}");
             }
         }
-        
+
         /// <summary>
         /// 取消订阅
         /// </summary>
@@ -69,7 +69,7 @@ namespace GGJ2026.UI
                 Debug.Log($"事件取消订阅: {eventName}");
             }
         }
-        
+
         /// <summary>
         /// 发布事件
         /// </summary>
@@ -79,18 +79,18 @@ namespace GGJ2026.UI
             {
                 // 使用标记列表来跟踪需要执行的处理程序
                 var handlersToExecute = new List<Action<object>>();
-                
+
                 // 首先收集所有需要执行的处理程序
                 foreach (var handler in eventHandlers[eventName])
                 {
                     handlersToExecute.Add(handler);
                 }
-                
+
                 // 然后执行收集到的处理程序
                 foreach (var handler in handlersToExecute)
                 {
                     // 检查处理程序是否仍然在订阅列表中（可能在其他处理程序中已被取消）
-                    if (eventHandlers.ContainsKey(eventName) && 
+                    if (eventHandlers.ContainsKey(eventName) &&
                         eventHandlers[eventName].Contains(handler))
                     {
                         try
@@ -103,11 +103,11 @@ namespace GGJ2026.UI
                         }
                     }
                 }
-                
+
                 Debug.Log($"事件发布: {eventName}");
             }
         }
-        
+
         /// <summary>
         /// 清空所有事件订阅
         /// </summary>
@@ -116,7 +116,7 @@ namespace GGJ2026.UI
             eventHandlers.Clear();
             Debug.Log("所有事件订阅已清空");
         }
-        
+
         /// <summary>
         /// 检查是否有订阅者
         /// </summary>
@@ -125,12 +125,14 @@ namespace GGJ2026.UI
             return eventHandlers.ContainsKey(eventName) && eventHandlers[eventName].Count > 0;
         }
     }
-    
+
     /// <summary>
     /// 常用UI事件定义
     /// </summary>
     public static class UIEventTypes
     {
+        public const string TIPS_SHOW = "tips_show";
+        public const string TIPS_HIDE = "tips_hide";
         public const string DESC_SHOW = "desc_show";
         public const string DESC_HIDE = "desc_hide";
         public const string BUTTON_CLICK = "button_click";
