@@ -216,12 +216,60 @@ namespace GGJ2026
             Vector2 mousePos2D = new Vector2(mouseWorldPos.x, mouseWorldPos.y);
 
             // 使用最简单的射线检测，排除所有可能的干扰
-            RaycastHit2D raycastHit = Physics2D.Raycast(mousePos2D, Vector2.zero);
+            RaycastHit2D[] hits = Physics2D.RaycastAll(mousePos2D, Vector2.zero);
+            RaycastHit2D raycastHit = default;
+
+            if (hits.Length > 0)
+            {
+                raycastHit = hits[0];
+                SpriteRenderer bestSR = null;
+                SpriteRenderer currentSR;
+
+                foreach (var hit in hits)
+                {
+                    SpriteRenderer sr = hit.collider.GetComponent<SpriteRenderer>();
+                    if (sr)
+                    {
+                        // 1. 比较 Sorting Layer (层级)
+                        // SortingLayer.GetLayerValueFromID 将 ID 转为 Inspector 里的排序权值
+                        currentSR = sr;
+                        bestSR = bestSR == null ? sr: bestSR;
+                        int currentLayerValue = SortingLayer.GetLayerValueFromID(currentSR.sortingLayerID);
+                        int bestLayerValue = SortingLayer.GetLayerValueFromID(bestSR.sortingLayerID);
+
+                        if (currentLayerValue > bestLayerValue)
+                        {
+                            raycastHit = hit;
+                            bestSR = currentSR;
+                        }
+                        else if (currentLayerValue == bestLayerValue)
+                        {
+                            // 2. 层级相同时，比较 Sorting Order (数字)
+                            if (currentSR.sortingOrder > bestSR.sortingOrder)
+                            {
+                                raycastHit = hit;
+                                bestSR = currentSR;
+                            }
+                            else if (currentSR.sortingOrder == bestSR.sortingOrder)
+                            {
+                                // 3. 数字也相同时，比较 Hierarchy 里的位置 (SiblingIndex)
+                                // 索引越大，代表在面板越靠下，即越晚渲染（遮挡上方）
+                                if (currentSR.transform.GetSiblingIndex() > bestSR.transform.GetSiblingIndex())
+                                {
+                                    raycastHit = hit;
+                                    bestSR = currentSR;
+                                }
+                            }
+                        }
+                    }
+                }
+                Debug.Log("你真正点到的是最上层的：" + raycastHit.collider.name);
+            }
 
             // 调试信息
             if (raycastHit)
             {
-                Debug.Log($"射线命中: {raycastHit.collider.gameObject.name} (Layer: {raycastHit.collider.gameObject.layer})");
+                Debug.Log($"射线命中: {raycastHit.collider?.gameObject.name} (Layer: {raycastHit.collider?.gameObject.layer})");
             }
             else
             {
