@@ -198,18 +198,7 @@ namespace GGJ2026.Gameplay
                 return;
             }
 
-            var sfx = "clickSound";
-
-            if (sceneName == "Success")
-            {
-                sfx = "SuccessSound";
-            }
-            else if (sceneName == "Failed")
-            {
-                sfx = "FailSound";
-            }
-
-            AudioManager.Instance.PlaySFX(sfx);
+            PlayMusic(sceneName);
 
             if (!SceneExists(sceneName))
             {
@@ -226,6 +215,33 @@ namespace GGJ2026.Gameplay
             });
 
             StartCoroutine(TransitionToScene(sceneName));
+        }
+
+        private void PlayMusic(string sceneName)
+        {
+            var sfx = "clickSound";
+
+            if (sceneName == "GameStart")
+            {
+                AudioManager.Instance.PlaySFX(sfx);
+                AudioManager.Instance.PlaySuccessMusic();
+                return;
+            }
+
+            if (sceneName == "Success")
+            {
+                AudioManager.Instance.PlaySFX(sfx);
+                AudioManager.Instance.PlaySuccessMusic();
+                return;
+            }
+
+            if (sceneName == "Failed")
+            {
+                sfx = "FailSound";
+            }
+
+            AudioManager.Instance.StopMusic();
+            AudioManager.Instance.PlaySFX(sfx);
         }
 
         /// <summary>
