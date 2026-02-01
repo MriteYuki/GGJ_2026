@@ -157,14 +157,14 @@ namespace GGJ2026
             if (!enableRotation) return;
             Vector3 newRotation = rotationType switch
             {
-                RotationType.North => Vector3.zero,
-                RotationType.Northeast => new Vector3(0, 0, -45),
-                RotationType.East => new Vector3(0, 0, -90),
-                RotationType.Southeast => new Vector3(0, 0, -135),
-                RotationType.South => new Vector3(0, 0, -180),
-                RotationType.Southwest => new Vector3(0, 0, -225),
-                RotationType.West => new Vector3(0, 0, -270),
-                RotationType.Northwest => new Vector3(0, 0, -315),
+                RotationType.Up => Vector3.zero,
+                RotationType.UpRight => new Vector3(0, 0, -45),
+                RotationType.Right => new Vector3(0, 0, -90),
+                RotationType.DownRight => new Vector3(0, 0, -135),
+                RotationType.Down => new Vector3(0, 0, -180),
+                RotationType.DownLeft => new Vector3(0, 0, -225),
+                RotationType.Left => new Vector3(0, 0, -270),
+                RotationType.UpLeft => new Vector3(0, 0, -315),
                 _ => Vector3.zero
             };
             if (lockXAxis) newRotation.x = transform.eulerAngles.x;
