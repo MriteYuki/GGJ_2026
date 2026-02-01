@@ -13,9 +13,143 @@ MonoBehaviour:
   m_Name: Level6
   m_EditorClassIdentifier: 
   serializableConditions:
-  - conditionType: 1
-    targetFeatureId: 
+  - conditionType: 0
+    targetFeatureId: 10
     targetFeatureType: 4
-    checkRadius: 0
-    checkRotation: {x: 0, y: 0}
-    checkScale: {x: 0, y: 0}
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -4.9, y: 1.6}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 0
+    targetFeatureId: 10
+    targetFeatureType: 4
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -3.1, y: 1.6}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 0
+    targetFeatureId: 20
+    targetFeatureType: 4
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -6.1, y: 1.25}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 0
+    targetFeatureId: 20
+    targetFeatureType: 4
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -2.1, y: 1.25}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 0
+    targetFeatureId: 30
+    targetFeatureType: 4
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -4, y: -0.2}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 0
+    targetFeatureId: 40
+    targetFeatureType: 4
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -4, y: 0.88}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 0
+    targetFeatureId: 50
+    targetFeatureType: 4
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -4, y: 1.62}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 2
+    targetFeatureId: 999
+    targetFeatureType: 4
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -4.9, y: 1.6}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 2
+    targetFeatureId: 999
+    targetFeatureType: 4
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -3.1, y: 1.6}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 2
+    targetFeatureId: 999
+    targetFeatureType: 4
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -6.1, y: 1.25}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 2
+    targetFeatureId: 999
+    targetFeatureType: 4
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -2.1, y: 1.25}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 2
+    targetFeatureId: 999
+    targetFeatureType: 4
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -4, y: -0.2}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 2
+    targetFeatureId: 999
+    targetFeatureType: 4
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -4, y: 0.88}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
+  - conditionType: 2
+    targetFeatureId: 999
+    targetFeatureType: 4
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: {x: -4, y: 1.62}
+    checkRadius: 1
+    checkRotation: 0
+    checkScale: 1
