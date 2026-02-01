@@ -85,16 +85,16 @@ namespace GGJ2026.Gameplay
         private string GetSceneInfoText()
         {
             var gm = GameManager.Instance;
-            
+
             string info = $"当前场景: {gm.CurrentScene}\n";
             info += $"场景位置: {gm.CurrentScenePositionInfo}\n";
             info += $"流程链: {gm.CurrentChainName ?? "无"}\n";
-            
+
             if (gm.IsFinalLevel)
             {
                 info += "<color=red>这是最终关卡！</color>\n";
             }
-            
+
             return info;
         }
 
@@ -104,7 +104,7 @@ namespace GGJ2026.Gameplay
         private string GetNextSceneInfoText()
         {
             var gm = GameManager.Instance;
-            
+
             if (gm.HasNextScene)
             {
                 return $"下一个场景: {gm.NextScene}";
@@ -128,6 +128,8 @@ namespace GGJ2026.Gameplay
             {
                 GameManager.Instance.LoadNextScene();
             }
+
+            AudioManager.Instance.PlaySFX("clickSound");
         }
 
         /// <summary>
@@ -136,6 +138,7 @@ namespace GGJ2026.Gameplay
         private void OnRestartClick()
         {
             GameManager.Instance.ReloadCurrentScene();
+            AudioManager.Instance.PlaySFX("clickSound");
         }
 
         /// <summary>
@@ -144,6 +147,7 @@ namespace GGJ2026.Gameplay
         private void OnMainMenuClick()
         {
             GameManager.Instance.LoadMainMenu();
+            AudioManager.Instance.PlaySFX("clickSound");
         }
 
         /// <summary>
@@ -153,7 +157,7 @@ namespace GGJ2026.Gameplay
         private void ShowFlowInfo()
         {
             var gm = GameManager.Instance;
-            
+
             Debug.Log($"=== 场景流程信息 ===");
             Debug.Log($"当前场景: {gm.CurrentScene}");
             Debug.Log($"场景位置: {gm.CurrentScenePositionInfo}");

@@ -89,7 +89,11 @@ namespace GGJ2026
         {
             if (Input.GetMouseButtonUp(0))
             {
-                currentlyDragging = null;
+                if (currentlyDragging != null)
+                {
+                    AudioManager.Instance.PlaySFX("DropFeature");
+                    currentlyDragging = null;
+                }
             }
 
             if (currentlyDragging != null)
@@ -321,12 +325,16 @@ namespace GGJ2026
                     var next = ((int)feature.Scale + 1) % 3;
                     feature.Scale = (ScaleType)next;
                     ScaleBy((ScaleType)next);
+
+                    AudioManager.Instance.PlaySFX("clickSound");
                 }
                 if (Input.GetKeyDown(scaleDownKey))
                 {
                     var last = ((int)feature.Scale - 1 + 3) % 3;
                     feature.Scale = (ScaleType)last;
                     ScaleBy((ScaleType)last);
+
+                    AudioManager.Instance.PlaySFX("clickSound");
                 }
             }
 
@@ -338,12 +346,16 @@ namespace GGJ2026
                     var next = ((int)feature.Rotation + 1) % 8;
                     feature.Rotation = (RotationType)next;
                     RotateBy((RotationType)next);
+
+                    AudioManager.Instance.PlaySFX("clickSound");
                 }
                 if (Input.GetKeyDown(rotateLeftKey))
                 {
                     var last = ((int)feature.Rotation + 7) % 8;
                     feature.Rotation = (RotationType)last;
                     RotateBy((RotationType)last);
+
+                    AudioManager.Instance.PlaySFX("clickSound");
                 }
             }
 
