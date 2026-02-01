@@ -9,19 +9,25 @@ namespace GGJ2026.Gameplay
 {
 
     [Serializable]
-    public struct SceneTransition
-    {
-        public string sceneFrom;
-        public string sceneTo;
-    }
-
-    [Serializable]
     public struct TransitionData
     {
         public string sceneName;
         public string currentScene;
         public string previousScene;
         public float progress;
+    }
+
+    [Serializable]
+    public struct ItemData
+    {
+        public string name;
+        public string description;
+
+        public ItemData(string name, string description)
+        {
+            this.name = name;
+            this.description = description;
+        }
     }
 
     /// <summary>

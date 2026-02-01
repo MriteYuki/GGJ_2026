@@ -103,7 +103,8 @@ MonoBehaviour:
   featureID: 0
   rotationType: 0
   scaleType: 1
-  description: 
+  name: "\u8FD9\u662F\u540D\u5B57"
+  description: "\u8FD9\u662F\u63CF\u8FF0"
 --- !u!114 &8865515583871516861
 MonoBehaviour:
   m_ObjectHideFlags: 0
