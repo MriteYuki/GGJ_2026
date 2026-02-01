@@ -678,7 +678,7 @@ MonoBehaviour:
   musicVolume: 0.5
   sfxVolume: 0.8
   mainMenuBGM: {fileID: 8300000, guid: 9050fa9ba95a6ab45a7817a357d48795, type: 3}
-  gameBGM: {fileID: 0}
+  gameBGM: {fileID: 8300000, guid: 058cdedf24e17ce408f77a5fc3ff2ae9, type: 3}
   successBGM: {fileID: 8300000, guid: 9050fa9ba95a6ab45a7817a357d48795, type: 3}
   failBGM: {fileID: 0}
   debugMode: 0
