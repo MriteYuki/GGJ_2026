@@ -106,6 +106,11 @@ namespace GGJ2026
 
             if (Input.GetMouseButtonDown(0))
             {
+                if (currentlySelected != null)
+                {
+                    AudioManager.Instance.PlaySFX("clickSound");
+                }
+
                 currentlyDragging = currentlySelected;
             }
 
