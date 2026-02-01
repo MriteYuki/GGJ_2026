@@ -158,9 +158,9 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 播放指定的背景音乐
+    /// 播放指定的背景音乐（带淡入淡出效果）
     /// </summary>
-    public void PlayMusic(AudioClip clip)
+    public void PlayMusic(AudioClip clip, float fadeDuration = 0.5f)
     {
         if (clip == null)
         {
@@ -176,8 +176,47 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
+        StartCoroutine(PlayMusicWithFade(clip, fadeDuration));
+    }
+
+    /// <summary>
+    /// 播放背景音乐并处理淡入淡出效果
+    /// </summary>
+    private IEnumerator PlayMusicWithFade(AudioClip clip, float fadeDuration)
+    {
+        float elapsedTime;
+
+        // 如果当前有音乐正在播放，先淡出
+        if (musicAudioSource.isPlaying && musicAudioSource.clip != null)
+        {
+            float startVolume = musicAudioSource.volume;
+            elapsedTime = 0f;
+
+            while (elapsedTime < fadeDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                musicAudioSource.volume = Mathf.Lerp(startVolume, 0f, elapsedTime / fadeDuration);
+                yield return null;
+            }
+
+            musicAudioSource.Stop();
+        }
+
+        // 设置新音乐并淡入
         musicAudioSource.clip = clip;
         musicAudioSource.Play();
+
+        float targetVolume = musicVolume;
+        elapsedTime = 0f;
+
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            musicAudioSource.volume = Mathf.Lerp(0f, targetVolume, elapsedTime / fadeDuration);
+            yield return null;
+        }
+
+        musicAudioSource.volume = targetVolume;
 
         if (debugMode)
         {
