@@ -677,9 +677,9 @@ MonoBehaviour:
   sfxAudioSource: {fileID: 1537947240}
   musicVolume: 0.9
   sfxVolume: 1
-  mainMenuBGM: {fileID: 0}
+  mainMenuBGM: {fileID: 8300000, guid: 9050fa9ba95a6ab45a7817a357d48795, type: 3}
   gameBGM: {fileID: 0}
-  successBGM: {fileID: 0}
+  successBGM: {fileID: 8300000, guid: 9050fa9ba95a6ab45a7817a357d48795, type: 3}
   failBGM: {fileID: 0}
   debugMode: 0
 --- !u!1 &1376736726
