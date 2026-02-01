@@ -324,15 +324,15 @@ namespace GGJ2026
             // 旋转操作
             if (enableRotation)
             {
-                if (Input.GetKeyDown(rotateLeftKey))
+                if (Input.GetKeyDown(rotateRightKey))
                 {
-                    var next = ((int)feature.Rotation - 1 + 8) % 8;
+                    var next = ((int)feature.Rotation +1) % 8;
                     feature.Rotation = (RotationType)next;
                     RotateBy((RotationType)next);
                 }
-                if (Input.GetKeyDown(rotateRightKey))
+                if (Input.GetKeyDown(rotateLeftKey))
                 {
-                    var last = ((int)feature.Rotation + 1) % 8;
+                    var last = ((int)feature.Rotation + 7) % 8;
                     feature.Rotation = (RotationType)last;
                     RotateBy((RotationType)last);
                 }
