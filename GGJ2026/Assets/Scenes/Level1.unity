@@ -1563,7 +1563,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: -2
   m_Sprite: {fileID: 21300000, guid: f83fb5198e43b8c43b60f8513d8e1964, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1815,7 +1815,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: a5a0217196d15c647886d047d02b0e30, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2457,7 +2457,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: -1
+  m_SortingOrder: -3
   m_TargetDisplay: 0
 --- !u!1 &1356634019
 GameObject:
@@ -4326,7 +4326,7 @@ GameObject:
   - component: {fileID: 2107870880}
   - component: {fileID: 2107870879}
   m_Layer: 0
-  m_Name: face50
+  m_Name: innerFace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4410,8 +4410,8 @@ SceneRoots:
   - {fileID: 554365205}
   - {fileID: 619096347}
   - {fileID: 1376750583}
-  - {fileID: 2107870880}
   - {fileID: 851936510}
+  - {fileID: 2107870880}
   - {fileID: 1029262127}
   - {fileID: 1136520824}
   - {fileID: 191156886}
