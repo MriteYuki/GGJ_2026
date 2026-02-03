@@ -23,6 +23,8 @@ namespace GGJ2026.Gameplay
         private readonly Dictionary<Feature, FeatureState> initialFeatureStates = new();
         private bool hasMarkedStartState = false;
 
+        public TimedFadeUI falseText;
+
         /// <summary>
         /// 当前关卡数据
         /// </summary>
@@ -303,7 +305,11 @@ namespace GGJ2026.Gameplay
             else
             {
                 Debug.Log("<color=#FF0000>关卡未通过，请检查条件</color>");
-                ResetLevel();
+                if (falseText != null)
+                {
+                    falseText.Show();
+                }
+                //ResetLevel();
             }
         }
 
