@@ -23,7 +23,7 @@ namespace GGJ2026.Gameplay.Condition
             var enableScaleProp = property.FindPropertyRelative("enableScale");
             var checkPositionProp = property.FindPropertyRelative("checkPosition");
             var checkRotationListProp = property.FindPropertyRelative("checkRotationList");
-            var checkScaleProp = property.FindPropertyRelative("checkScale");
+            var checkScaleListProp = property.FindPropertyRelative("checkScaleList");
 
             float lineHeight = EditorGUIUtility.singleLineHeight;
             float spacing = EditorGUIUtility.standardVerticalSpacing;
@@ -95,8 +95,8 @@ namespace GGJ2026.Gameplay.Condition
                 yOffset += currentRect.height + spacing;
 
                 currentRect.y = position.y + yOffset;
-                currentRect.height = EditorGUI.GetPropertyHeight(checkScaleProp);
-                EditorGUI.PropertyField(currentRect, checkScaleProp);
+                currentRect.height = EditorGUI.GetPropertyHeight(checkScaleListProp);
+                EditorGUI.PropertyField(currentRect, checkScaleListProp);
             }
 
             EditorGUI.EndProperty();
@@ -116,7 +116,7 @@ namespace GGJ2026.Gameplay.Condition
             var enableScaleProp = property.FindPropertyRelative("enableScale");
             var checkPositionProp = property.FindPropertyRelative("checkPosition");
             var checkRotationListProp = property.FindPropertyRelative("checkRotationList");
-            var checkScaleProp = property.FindPropertyRelative("checkScale");
+            var checkScaleListProp = property.FindPropertyRelative("checkScaleList");
 
             var conditionType = (ConditionType)conditionTypeProp.enumValueIndex;
 
@@ -147,7 +147,7 @@ namespace GGJ2026.Gameplay.Condition
             height += EditorGUI.GetPropertyHeight(enableScaleProp) + spacing;
             height += EditorGUI.GetPropertyHeight(checkPositionProp) + spacing;
             height += EditorGUI.GetPropertyHeight(checkRotationListProp) + spacing;
-            height += EditorGUI.GetPropertyHeight(checkScaleProp) + spacing;
+            height += EditorGUI.GetPropertyHeight(checkScaleListProp) + spacing;
 
             return height;
         }

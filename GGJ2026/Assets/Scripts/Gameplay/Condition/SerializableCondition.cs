@@ -23,7 +23,7 @@ namespace GGJ2026.Gameplay.Condition
         [SerializeField] private bool enableScale = true;
         [SerializeField] private PositionType checkPosition;
         [SerializeField] private List<RotationType> checkRotationList;
-        [SerializeField] private ScaleType checkScale;
+        [SerializeField] private List<ScaleType> checkScaleList;
 
         /// <summary>
         /// 条件类型
@@ -83,7 +83,7 @@ namespace GGJ2026.Gameplay.Condition
 
             condition.CompareFeature = feature;
             condition.Set(enablePosition, enableRotation, enableScale,
-                checkPosition, checkRotationList, checkScale);
+                checkPosition, checkRotationList, checkScaleList);
 
             return condition;
         }
@@ -116,15 +116,22 @@ namespace GGJ2026.Gameplay.Condition
 
         public override string ToString()
         {
-            var str = string.Empty;
+            var strRotation = string.Empty;
             var index = 0;
             foreach(var checkRotation in checkRotationList)
             {
-                str += $"Rostation{++index}: {checkRotation},";
+                strRotation += $"Rostation{++index}: {checkRotation}|";
+            }
+
+            var strScale = string.Empty;
+            index = 0;
+            foreach (var checkScale in checkScaleList)
+            {
+                strScale += $"Scale{++index}: {checkScale}|";
             }
 
             return $"SerializableCondition {{Type: {conditionType}, TargetId: {targetFeatureId}, TargetType: {targetFeatureType}" +
-            $"Position: {checkPosition}, {str} Scale: {checkScale}}}";
+            $"Position: {checkPosition}, {strRotation}, {strScale}}}";
         }
     }
 }

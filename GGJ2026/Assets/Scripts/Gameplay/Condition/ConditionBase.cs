@@ -29,7 +29,7 @@ namespace GGJ2026.Gameplay.Condition
 
         [Header("检测比例-容差比例")]
         [Tooltip("设置放缩比例的容差范围 X:最小值 Y:最大值")]
-        [SerializeField] protected ScaleType checkScale;
+        [SerializeField] protected List<ScaleType> checkScaleList;
 
         [Header("检测位置-相对位置")]
         [SerializeField] protected PositionType checkPosition;
@@ -47,13 +47,13 @@ namespace GGJ2026.Gameplay.Condition
         /// 设置比较参数
         /// </summary>
         public void Set(bool enablePosition, bool enableRotation, bool enableScale,
-                        PositionType checkPosition, List<RotationType> checkRotationList, ScaleType checkScale)
+                        PositionType checkPosition, List<RotationType> checkRotationList, List<ScaleType> checkScaleList)
         {
             this.enablePosition = enablePosition;
             this.enableRotation = enableRotation;
             this.enableScale = enableScale;
             this.checkPosition = checkPosition;
-            this.checkScale = checkScale;
+            this.checkScaleList = checkScaleList;
             this.checkRotationList = checkRotationList;
         }
 
@@ -105,7 +105,7 @@ namespace GGJ2026.Gameplay.Condition
             if (compareFeature == null)
                 return false;
 
-            return compareFeature.Scale == checkScale;
+            return checkScaleList.Any(checkScale => checkScale == compareFeature.Scale);
         }
 
         /// <summary>
