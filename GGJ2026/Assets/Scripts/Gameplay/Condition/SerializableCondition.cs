@@ -20,8 +20,7 @@ namespace GGJ2026.Gameplay.Condition
         [SerializeField] private bool enablePosition = true;
         [SerializeField] private bool enableRotation = true;
         [SerializeField] private bool enableScale = true;
-        [SerializeField] private Vector2 checkPosition;
-        [SerializeField] private float checkRadius;
+        [SerializeField] private PositionType checkPosition;
         [SerializeField] private RotationType checkRotation;
         [SerializeField] private ScaleType checkScale;
 
@@ -83,7 +82,7 @@ namespace GGJ2026.Gameplay.Condition
 
             condition.CompareFeature = feature;
             condition.Set(enablePosition, enableRotation, enableScale,
-                checkPosition, checkRadius, checkRotation, checkScale);
+                checkPosition, checkRotation, checkScale);
 
             return condition;
         }
@@ -117,7 +116,7 @@ namespace GGJ2026.Gameplay.Condition
         public override string ToString()
         {
             return $"SerializableCondition {{Type: {conditionType}, TargetId: {targetFeatureId}, TargetType: {targetFeatureType}" +
-            $"Position: {checkPosition}, Radius: {checkRadius}, Rotation: {checkRotation}, Scale: {checkScale}}}";
+            $"Position: {checkPosition}, Rotation: {checkRotation}, Scale: {checkScale}}}";
         }
     }
 }

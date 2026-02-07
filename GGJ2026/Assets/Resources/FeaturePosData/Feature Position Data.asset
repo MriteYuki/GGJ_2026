@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76eb7ac4228dd3e4faa42f95efafcc5c, type: 3}
+  m_Name: Feature Position Data
+  m_EditorClassIdentifier: 
+  FacePosition: {x: -4.009999, y: 1.62, z: 0}
+  FaceDetectionRadius: 1
+  MouthPosition: {x: -3.99, y: -0.2, z: 0}
+  MouthDetectionRadius: 1
+  NosePosition: {x: -3.99, y: 0.88, z: 0}
+  NoseDetectionRadius: 1
+  LeftEyePosition: {x: -4.87, y: 1.63, z: 0}
+  LeftEyeDetectionRadius: 1
+  RightEyePosition: {x: -3.129999, y: 1.56, z: 0}
+  RightEyeDetectionRadius: 1
+  LeftEarPosition: {x: -6.030001, y: 1.25, z: 0}
+  LeftEarDetectionRadius: 1
+  RightEarPosition: {x: -2.110001, y: 1.25, z: 0}
+  RightEarDetectionRadius: 1

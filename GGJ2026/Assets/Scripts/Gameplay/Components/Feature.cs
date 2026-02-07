@@ -1,5 +1,9 @@
+using GGJ2026.Gameplay.ScriptableObjects;
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace GGJ2026
 {
@@ -13,6 +17,21 @@ namespace GGJ2026
         Mouth,
         Nose,
         Face
+    }
+
+    /// <summary>
+    /// 位置类型（面部特征类型）
+    /// </summary>
+    public enum PositionType
+    {
+        None, // 无
+        Face, // 面部
+        Mouth, // 嘴巴
+        Nose, // 鼻子
+        LeftEye, // 左眼
+        RightEye, // 右眼
+        LeftEar, // 左耳
+        RightEar // 右耳
     }
 
     /// <summary>
@@ -44,21 +63,24 @@ namespace GGJ2026
     /// 面部特征数据类
     /// </summary>
     [System.Serializable]
+    [RequireComponent(typeof(TransformUtils))]
     public class Feature : MonoBehaviour
     {
         [Header("基础信息")]
         [SerializeField] private FeatureType featureType;
         [SerializeField] private string featureID;
 
+        [SerializeField] private PositionType positionType = PositionType.None;
+
         [SerializeField] private RotationType rotationType = RotationType.Up;
 
         [SerializeField] private ScaleType scaleType = ScaleType.Medium;
 
-        [SerializeField] private string name;
+        [SerializeField, FormerlySerializedAs("name")] private string featureName;
 
         [SerializeField, TextArea(3, 10)] private string description;
 
-        public string Name => name;
+        public string Name => featureName;
 
         public string Description => description;
 
@@ -83,9 +105,10 @@ namespace GGJ2026
         /// <summary>
         /// 位置
         /// </summary>
-        public Vector3 Position
+        public PositionType Position
         {
-            get => transform.localPosition;
+            get => positionType;
+            set => positionType = value;
         }
 
         /// <summary>
@@ -167,6 +190,11 @@ namespace GGJ2026
             };
 
             transform.localScale = scale;
+
+            if(TryGetComponent<TransformUtils>(out var transformUtils))
+            {
+                transformUtils.UpdatePositionType(false);
+            }
         }
 #endif
     }

@@ -1,5 +1,7 @@
 using GGJ2026.Gameplay;
+using GGJ2026.Gameplay.ScriptableObjects;
 using GGJ2026.UI;
+using System.Collections;
 using UnityEngine;
 
 namespace GGJ2026
@@ -7,11 +9,15 @@ namespace GGJ2026
     /// <summary>
     /// Transform交互组件 - 3D物体的Transform工具，提供游戏内Transform操作功能
     /// </summary>
+    [RequireComponent(typeof(Feature))]
     public class TransformUtils : MonoBehaviour
     {
         // 静态全局选择管理器
         private static TransformUtils currentlySelected = null;
         private static TransformUtils currentlyDragging = null;
+
+        [Header("位置信息")]
+        [SerializeField] private FeaturePositionData positionData;
 
         [Header("操作设置")]
         [SerializeField] private float moveSpeed = 10f;
@@ -27,6 +33,8 @@ namespace GGJ2026
         [Header("视觉反馈")]
         [SerializeField] private Color selectionColor = Color.yellow;
         [SerializeField] private float selectionIntensity = 1.3f;
+        [SerializeField] private float smoothness = 0.3f;
+        [SerializeField] private AnimationCurve animationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
         [Header("约束设置")]
         [SerializeField] private bool enablePosition = true;
@@ -41,12 +49,16 @@ namespace GGJ2026
         private SpriteRenderer spriteRenderer;
         private Color originalColor;
         private Camera mainCamera;
+        private Feature feature;
+        private Vector3 lastPosition;
+        private bool inSmoothMoving = false;
 
         #region Unity生命周期
 
         void Awake()
         {
             // 获取组件引用
+            feature = GetComponent<Feature>();
             spriteRenderer = GetComponent<SpriteRenderer>();
             mainCamera = Camera.main;
 
@@ -82,6 +94,7 @@ namespace GGJ2026
         {
             // 初始状态为非选中
             SetSelectionVisual(false);
+            UpdatePositionType(false);
         }
 
         void Update()
@@ -90,6 +103,7 @@ namespace GGJ2026
             {
                 if (currentlyDragging != null)
                 {
+                    currentlyDragging.UpdatePositionType(true);
                     AudioManager.Instance.PlaySFX("DropFeature");
                     UIEventSystem.Instance.Publish(UIEventTypes.TIPS_HIDE);
                     currentlyDragging = null;
@@ -174,11 +188,73 @@ namespace GGJ2026
 
         private void OnShowDesc()
         {
-            if (TryGetComponent<Feature>(out var feature))
-            {
-                UIEventSystem.Instance.Publish(UIEventTypes.DESC_SHOW,
+            UIEventSystem.Instance.Publish(UIEventTypes.DESC_SHOW,
                     new ItemData(feature.Name, feature.Description, feature.Scale));
+        }
+
+        public void UpdatePositionType(bool doSmooth)
+        {
+            if (!TryGetComponent<Feature>(out var feature))
+            {
+                return;
             }
+
+            var curPosition = transform.position;
+
+            if (lastPosition != curPosition)
+            {
+                if (positionData)
+                {
+                    feature.Position = positionData.CheckInRange(curPosition, out var type) ? type : PositionType.None;
+                }
+
+                // Debug.LogError($"计算SmoothPosition: {feature.Position}, curPosition: {transform.position}, lastPosition: {lastPosition}");
+                lastPosition = curPosition;
+            }
+
+            if (feature.Position == PositionType.None)
+            {
+                return;
+            }
+
+            // Debug.LogError($"执行SmoothPosition, targetPos: {feature.Position}");
+
+            if (doSmooth)
+            {
+                StartCoroutine(SmoothPosition(feature.Position));
+            }
+            else
+            {
+                MoveTo(positionData.Convert2Pos(feature.Position));
+            }
+        }
+
+        private IEnumerator SmoothPosition(PositionType positionType)
+        {
+            inSmoothMoving = true;
+            float elapsed = 0f;
+            var startPos = transform.position;
+            var targetPos = positionData.Convert2Pos(positionType);
+
+            if (Vector3.Distance(startPos, targetPos) < 0.001f)
+            {
+                transform.position = targetPos;
+                yield break;
+            }
+
+            while (elapsed < smoothness)
+            {
+                elapsed += Time.deltaTime;
+                // 计算归一化时间 (0 到 1)
+                float t = Mathf.Clamp01(elapsed / smoothness);
+                float curveT = animationCurve.Evaluate(t);
+
+                // 使用 Lerp 进行平滑插值
+                transform.position = Vector3.Lerp(startPos, targetPos, curveT);
+                yield return null;
+            }
+
+            transform.position = targetPos;
         }
 
         /// <summary>
@@ -322,13 +398,6 @@ namespace GGJ2026
 
         private void HandleTransformOperations()
         {
-
-            if (!TryGetComponent<Feature>(out var feature))
-            {
-                Debug.LogWarning("Feature not found, transform operations disabled");
-                return;
-            }
-
             // 缩放操作
             if (enableScale)
             {
@@ -376,7 +445,7 @@ namespace GGJ2026
 
         private void PerformDragMovement(TransformUtils transformUtils)
         {
-            if (mainCamera == null || transformUtils == null)
+            if (!mainCamera || !transformUtils || !currentlyDragging)
             {
                 return;
             }
@@ -434,13 +503,9 @@ namespace GGJ2026
         {
             SetSelectionVisual(isSelected);
 
-            var feature = GetComponent<Feature>();
-            if (feature)
-            {
-                // 可以在这里触发选择事件
-                Debug.Log($"{gameObject.name} {(isSelected ? "selected" : "deselected")}" +
+            // 可以在这里触发选择事件
+            Debug.Log($"{gameObject.name} {(isSelected ? "selected" : "deselected")}" +
                 $"- 当前位置: {transform.position} - 当前旋转: {feature.Rotation} - 当前缩放: {feature.Scale}");
-            }
         }
 
         #endregion
@@ -451,6 +516,16 @@ namespace GGJ2026
         /// 是否被选中
         /// </summary>
         public bool IsSelected => isSelected;
+
+        /// <summary>
+        /// 是否正在拖拽
+        /// </summary>
+        public bool IsDragging => currentlyDragging != null;
+
+        /// <summary>
+        /// 是否正在平滑移动
+        /// </summary>
+        public bool InSmoothMoving => inSmoothMoving;
 
         /// <summary>
         /// 当前位置
