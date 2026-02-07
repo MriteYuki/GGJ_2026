@@ -205,7 +205,7 @@ namespace GGJ2026
             {
                 if (positionData)
                 {
-                    feature.Position = positionData.CheckInRange(curPosition, out var type) ? type : PositionType.None;
+                    feature.Position = positionData.GetCurPositionType(feature.Type, curPosition);
                 }
 
                 // Debug.LogError($"计算SmoothPosition: {feature.Position}, curPosition: {transform.position}, lastPosition: {lastPosition}");

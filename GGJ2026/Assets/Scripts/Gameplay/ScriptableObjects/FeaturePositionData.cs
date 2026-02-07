@@ -43,10 +43,10 @@ namespace GGJ2026.Gameplay.ScriptableObjects
         public float RightEarDetectionRadius = 1f;
         
 
-        public bool CheckInRange(Vector3 curPos, out PositionType nearestPos)
+        public PositionType GetCurPositionType(FeatureType featureType, Vector3 curPos)
         {
             var minDis = float.MaxValue;
-            nearestPos = PositionType.None;
+            var result = PositionType.None;
             var faceDis = Vector3.Distance(curPos, FacePosition);
             var mouthDis = Vector3.Distance(curPos, MouthPosition);
             var noseDis = Vector3.Distance(curPos, NosePosition);
@@ -55,33 +55,28 @@ namespace GGJ2026.Gameplay.ScriptableObjects
             var leftEarDis = Vector3.Distance(curPos, LeftEarPosition);
             var rightEarDis = Vector3.Distance(curPos, RightEarPosition);
 
-            minDis = Math.Min(minDis, faceDis);
-            minDis = Math.Min(minDis, noseDis);
-            minDis = Math.Min(minDis, mouthDis);
-            minDis = Math.Min(minDis, leftEyeDis);
-            minDis = Math.Min(minDis, rightEyeDis);
-            minDis = Math.Min(minDis, leftEarDis);
-            minDis = Math.Min(minDis, rightEarDis);
-
-            nearestPos = minDis == faceDis ? PositionType.Face : nearestPos;
-            nearestPos = minDis == noseDis? PositionType.Nose : nearestPos;
-            nearestPos = minDis == mouthDis ? PositionType.Mouth : nearestPos;
-            nearestPos = minDis == leftEyeDis ? PositionType.LeftEye : nearestPos;
-            nearestPos = minDis == rightEyeDis ? PositionType.RightEye : nearestPos;
-            nearestPos = minDis == leftEarDis ? PositionType.LeftEar : nearestPos;
-            nearestPos = minDis == rightEarDis ? PositionType.RightEar : nearestPos;
-
-            return nearestPos switch
+            if(featureType != FeatureType.Face)
             {
-                PositionType.Face => minDis <= FaceDetectionRadius,
-                PositionType.Mouth => minDis <= MouthDetectionRadius,
-                PositionType.Nose => minDis <= NoseDetectionRadius,
-                PositionType.LeftEye => minDis <= LeftEyeDetectionRadius,
-                PositionType.RightEye => minDis <= RightEyeDetectionRadius,
-                PositionType.LeftEar => minDis <= LeftEarDetectionRadius,
-                PositionType.RightEar => minDis <= RightEarDetectionRadius,
-                _ => false,
-            };
+                minDis = Math.Min(minDis, noseDis);
+                minDis = Math.Min(minDis, mouthDis);
+                minDis = Math.Min(minDis, leftEyeDis);
+                minDis = Math.Min(minDis, rightEyeDis);
+                minDis = Math.Min(minDis, leftEarDis);
+                minDis = Math.Min(minDis, rightEarDis);
+
+                result = minDis == noseDis && noseDis <= NoseDetectionRadius ? PositionType.Nose : result;
+                result = minDis == mouthDis && mouthDis <= MouthDetectionRadius ? PositionType.Mouth : result;
+                result = minDis == leftEyeDis && leftEyeDis <= LeftEyeDetectionRadius ? PositionType.LeftEye : result;
+                result = minDis == rightEyeDis && rightEyeDis <= RightEyeDetectionRadius ? PositionType.RightEye : result;
+                result = minDis == leftEarDis && leftEarDis <= LeftEarDetectionRadius ? PositionType.LeftEar : result;
+                result = minDis == rightEarDis && rightEarDis <= RightEarDetectionRadius ? PositionType.RightEar : result;
+
+                return result;
+            }
+            else
+            {
+                return faceDis <= FaceDetectionRadius ? PositionType.Face : result;
+            }
         }
 
         public Vector3 Convert2Pos(PositionType positionType)
