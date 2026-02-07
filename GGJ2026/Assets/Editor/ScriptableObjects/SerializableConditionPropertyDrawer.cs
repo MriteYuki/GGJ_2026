@@ -22,7 +22,7 @@ namespace GGJ2026.Gameplay.Condition
             var enableRotationProp = property.FindPropertyRelative("enableRotation");
             var enableScaleProp = property.FindPropertyRelative("enableScale");
             var checkPositionProp = property.FindPropertyRelative("checkPosition");
-            var checkRotationProp = property.FindPropertyRelative("checkRotation");
+            var checkRotationListProp = property.FindPropertyRelative("checkRotationList");
             var checkScaleProp = property.FindPropertyRelative("checkScale");
 
             float lineHeight = EditorGUIUtility.singleLineHeight;
@@ -90,8 +90,8 @@ namespace GGJ2026.Gameplay.Condition
                 yOffset += currentRect.height + spacing;
 
                 currentRect.y = position.y + yOffset;
-                currentRect.height = EditorGUI.GetPropertyHeight(checkRotationProp);
-                EditorGUI.PropertyField(currentRect, checkRotationProp);
+                currentRect.height = EditorGUI.GetPropertyHeight(checkRotationListProp);
+                EditorGUI.PropertyField(currentRect, checkRotationListProp);
                 yOffset += currentRect.height + spacing;
 
                 currentRect.y = position.y + yOffset;
@@ -115,7 +115,7 @@ namespace GGJ2026.Gameplay.Condition
             var enableRotationProp = property.FindPropertyRelative("enableRotation");
             var enableScaleProp = property.FindPropertyRelative("enableScale");
             var checkPositionProp = property.FindPropertyRelative("checkPosition");
-            var checkRotationProp = property.FindPropertyRelative("checkRotation");
+            var checkRotationListProp = property.FindPropertyRelative("checkRotationList");
             var checkScaleProp = property.FindPropertyRelative("checkScale");
 
             var conditionType = (ConditionType)conditionTypeProp.enumValueIndex;
@@ -146,7 +146,7 @@ namespace GGJ2026.Gameplay.Condition
             height += EditorGUI.GetPropertyHeight(enableScaleProp) + spacing;
             height += EditorGUI.GetPropertyHeight(enableScaleProp) + spacing;
             height += EditorGUI.GetPropertyHeight(checkPositionProp) + spacing;
-            height += EditorGUI.GetPropertyHeight(checkRotationProp) + spacing;
+            height += EditorGUI.GetPropertyHeight(checkRotationListProp) + spacing;
             height += EditorGUI.GetPropertyHeight(checkScaleProp) + spacing;
 
             return height;

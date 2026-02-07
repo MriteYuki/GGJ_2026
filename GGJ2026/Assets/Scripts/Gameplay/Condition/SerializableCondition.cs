@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GGJ2026.Gameplay.Condition
@@ -21,7 +22,7 @@ namespace GGJ2026.Gameplay.Condition
         [SerializeField] private bool enableRotation = true;
         [SerializeField] private bool enableScale = true;
         [SerializeField] private PositionType checkPosition;
-        [SerializeField] private RotationType checkRotation;
+        [SerializeField] private List<RotationType> checkRotationList;
         [SerializeField] private ScaleType checkScale;
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace GGJ2026.Gameplay.Condition
 
             condition.CompareFeature = feature;
             condition.Set(enablePosition, enableRotation, enableScale,
-                checkPosition, checkRotation, checkScale);
+                checkPosition, checkRotationList, checkScale);
 
             return condition;
         }
@@ -115,8 +116,15 @@ namespace GGJ2026.Gameplay.Condition
 
         public override string ToString()
         {
+            var str = string.Empty;
+            var index = 0;
+            foreach(var checkRotation in checkRotationList)
+            {
+                str += $"Rostation{++index}: {checkRotation},";
+            }
+
             return $"SerializableCondition {{Type: {conditionType}, TargetId: {targetFeatureId}, TargetType: {targetFeatureType}" +
-            $"Position: {checkPosition}, Rotation: {checkRotation}, Scale: {checkScale}}}";
+            $"Position: {checkPosition}, {str} Scale: {checkScale}}}";
         }
     }
 }

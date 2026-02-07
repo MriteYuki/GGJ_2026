@@ -1,5 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace GGJ2026.Gameplay.Condition
 {
@@ -24,7 +25,7 @@ namespace GGJ2026.Gameplay.Condition
 
         [Header("检测旋转-相对容差角度")]
         [Tooltip("设置旋转角度的容差范围 X:最小值 Y:最大值")]
-        [SerializeField] protected RotationType checkRotation;
+        [SerializeField] protected List<RotationType> checkRotationList;
 
         [Header("检测比例-容差比例")]
         [Tooltip("设置放缩比例的容差范围 X:最小值 Y:最大值")]
@@ -46,14 +47,14 @@ namespace GGJ2026.Gameplay.Condition
         /// 设置比较参数
         /// </summary>
         public void Set(bool enablePosition, bool enableRotation, bool enableScale,
-                        PositionType checkPosition, RotationType checkRotation, ScaleType checkScale)
+                        PositionType checkPosition, List<RotationType> checkRotationList, ScaleType checkScale)
         {
             this.enablePosition = enablePosition;
             this.enableRotation = enableRotation;
             this.enableScale = enableScale;
             this.checkPosition = checkPosition;
-            this.checkRotation = checkRotation;
             this.checkScale = checkScale;
+            this.checkRotationList = checkRotationList;
         }
 
         /// <summary>
@@ -89,7 +90,7 @@ namespace GGJ2026.Gameplay.Condition
             if (compareFeature == null)
                 return false;
 
-            return checkRotation == compareFeature.Rotation;
+            return checkRotationList.Any(checkRotation => checkRotation == compareFeature.Rotation);
         }
 
         /// <summary>
