@@ -150,10 +150,7 @@ namespace GGJ2026
 
             OnSelectionChanged();
 
-            if (TryGetComponent<Feature>(out var feature))
-            {
-                UIEventSystem.Instance.Publish(UIEventTypes.DESC_SHOW, new ItemData(feature.Name, feature.Description));
-            }
+            OnShowDesc();
 
             // Debug.LogError($"Select {currentlySelected.name}");
         }
@@ -173,6 +170,15 @@ namespace GGJ2026
             OnSelectionChanged();
 
             UIEventSystem.Instance.Publish(UIEventTypes.DESC_HIDE);
+        }
+
+        private void OnShowDesc()
+        {
+            if (TryGetComponent<Feature>(out var feature))
+            {
+                UIEventSystem.Instance.Publish(UIEventTypes.DESC_SHOW,
+                    new ItemData(feature.Name, feature.Description, feature.Scale));
+            }
         }
 
         /// <summary>
@@ -331,7 +337,7 @@ namespace GGJ2026
                     var next = ((int)feature.Scale + 1) % 3;
                     feature.Scale = (ScaleType)next;
                     ScaleBy((ScaleType)next);
-
+                    OnShowDesc();
                     AudioManager.Instance.PlaySFX("clickSound");
                 }
                 if (Input.GetKeyDown(scaleDownKey))
@@ -339,7 +345,7 @@ namespace GGJ2026
                     var last = ((int)feature.Scale - 1 + 3) % 3;
                     feature.Scale = (ScaleType)last;
                     ScaleBy((ScaleType)last);
-
+                    OnShowDesc();
                     AudioManager.Instance.PlaySFX("clickSound");
                 }
             }
@@ -352,7 +358,7 @@ namespace GGJ2026
                     var next = ((int)feature.Rotation + 1) % 8;
                     feature.Rotation = (RotationType)next;
                     RotateBy((RotationType)next);
-
+                    OnShowDesc();
                     AudioManager.Instance.PlaySFX("clickSound");
                 }
                 if (Input.GetKeyDown(rotateLeftKey))
@@ -360,7 +366,7 @@ namespace GGJ2026
                     var last = ((int)feature.Rotation + 7) % 8;
                     feature.Rotation = (RotationType)last;
                     RotateBy((RotationType)last);
-
+                    OnShowDesc();
                     AudioManager.Instance.PlaySFX("clickSound");
                 }
             }

@@ -22,11 +22,13 @@ namespace GGJ2026.Gameplay
     {
         public string name;
         public string description;
+        public ScaleType scaleType;
 
-        public ItemData(string name, string description)
+        public ItemData(string name, string description, ScaleType scaleType)
         {
             this.name = name;
             this.description = description;
+            this.scaleType = scaleType;
         }
     }
 

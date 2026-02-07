@@ -32,9 +32,17 @@ public class ItemInfo : MonoBehaviour
     {
         if(data is ItemData item)
         {
+            var scaleName = item.scaleType switch
+            {
+                GGJ2026.ScaleType.Large => "¡¾´ó¡¿",
+                GGJ2026.ScaleType.Medium => "¡¾ÖÐ¡¿",
+                GGJ2026.ScaleType.Small => "¡¾Ð¡¡¿",
+                _ => "¡¾£¿£¿£¿¡¿"
+            };
+
             if (nameText)
             {
-                nameText.text = item.name;
+                nameText.text = item.name + scaleName;
             }
             if (descriptionText)
             {
