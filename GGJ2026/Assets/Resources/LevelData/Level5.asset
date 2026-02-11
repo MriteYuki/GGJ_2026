@@ -16,6 +16,9 @@ MonoBehaviour:
   - conditionType: 1
     targetFeatureId: 
     targetFeatureType: 4
-    checkRadius: 0
-    checkRotation: {x: 0, y: 0}
-    checkScale: {x: 0, y: 0}
+    enablePosition: 1
+    enableRotation: 1
+    enableScale: 1
+    checkPosition: 0
+    checkRotationList: 
+    checkScaleList: 

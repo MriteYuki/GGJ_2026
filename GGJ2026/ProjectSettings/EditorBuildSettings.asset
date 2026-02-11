@@ -24,6 +24,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Failed.unity
     guid: e4a996f1b02dbcb4db1ec8823b8a323e
   - enabled: 1
+    path: Assets/Scenes/GameDead.unity
+    guid: 7b258d85ee320f84d99fec9e3b621d5f
+  - enabled: 1
     path: Assets/Scenes/Success.unity
     guid: 582ba977e90713345ada56efcb37db48
   m_configObjects: {}

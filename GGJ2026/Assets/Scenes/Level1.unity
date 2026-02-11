@@ -2660,7 +2660,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1663789824}
-  - {fileID: 1399892472}
   - {fileID: 1581195888}
   - {fileID: 1232338810}
   - {fileID: 364863984}
@@ -2910,8 +2909,9 @@ GameObject:
   - component: {fileID: 1399892472}
   - component: {fileID: 1399892474}
   - component: {fileID: 1399892473}
+  - component: {fileID: 1399892475}
   m_Layer: 0
-  m_Name: TimeText
+  m_Name: TimeInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2929,7 +2929,7 @@ RectTransform:
   m_LocalScale: {x: 1.00008, y: 1.00008, z: 1.00008}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1353495132}
+  m_Father: {fileID: 1605814097}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -2956,7 +2956,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 8:00 AM
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 24248a92db2460747b8da5bcd4e79ffe, type: 2}
   m_sharedMaterial: {fileID: 1631513702486016530, guid: 24248a92db2460747b8da5bcd4e79ffe, type: 2}
@@ -3033,6 +3033,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1399892471}
   m_CullTransparentMesh: 1
+--- !u!114 &1399892475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1399892471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8232e8538e828ce4680fd3a9f5b29903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeText: {fileID: 1399892473}
 --- !u!1 &1465455435
 GameObject:
   m_ObjectHideFlags: 0
@@ -3508,6 +3521,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1399892472}
   - {fileID: 2068600737}
   - {fileID: 438547432}
   m_Father: {fileID: 47881812}

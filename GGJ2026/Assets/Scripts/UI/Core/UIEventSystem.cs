@@ -140,5 +140,6 @@ namespace GGJ2026.UI
         public const string SETTINGS_CHANGED = "settings_changed";
         public const string GAME_STATE_CHANGED = "game_state_changed";
         public const string UI_ANIMATION_COMPLETE = "ui_animation_complete";
+        public const string UI_TIME_UPDATE = "ui_time_update";
     }
 }

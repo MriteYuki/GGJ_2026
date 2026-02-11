@@ -20,6 +20,9 @@ namespace GGJ2026.Gameplay.Condition
             // 并根据其返回的总高度自动撑开父级窗口。
             EditorGUILayout.PropertyField(listProp, true);
 
+            SerializedProperty timeConfigsProp = serializedObject.FindProperty("timeConfigs");
+            EditorGUILayout.PropertyField(timeConfigsProp, true);
+
             // 应用修改
             serializedObject.ApplyModifiedProperties();
         }

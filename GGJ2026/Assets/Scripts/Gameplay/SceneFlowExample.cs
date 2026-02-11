@@ -137,7 +137,7 @@ namespace GGJ2026.Gameplay
         /// </summary>
         private void OnRestartClick()
         {
-            GameManager.Instance.ReloadCurrentScene();
+            GameManager.Instance.ReloadCurrentLevelScene();
             AudioManager.Instance.PlaySFX("clickSound");
         }
 

@@ -2,9 +2,17 @@ using System.Collections.Generic;
 using GGJ2026.Gameplay.Condition;
 using UnityEngine;
 using GGJ2026;
+using System;
 
 namespace GGJ2026.Gameplay.ScriptableObjects
 {
+    /// <summary>
+    /// 时间改变事件
+    /// </summary>
+    /// <param name="isValid">是否有效时间</param>
+    /// <param name="curTimeText">当前时间</param>
+    public delegate void TimeChangedHandler(bool isValid, string curTimeText);
+
     /// <summary>
     /// 关卡数据配置
     /// </summary>
@@ -13,6 +21,39 @@ namespace GGJ2026.Gameplay.ScriptableObjects
     {
         [Header("关卡条件配置")]
         [SerializeField] private List<SerializableCondition> serializableConditions = new();
+
+        [Header("时间配置(血量)")]
+        [SerializeField] private List<string> timeConfigs = new();
+
+        private int curTimeIndex = 0;
+
+        public TimeChangedHandler OnTimeChanged;
+
+        /// <summary>
+        /// 前进时间
+        /// </summary>
+        public void MoveTimeForward()
+        {
+            curTimeIndex++;
+            var isVaild = curTimeIndex < timeConfigs.Count;
+            var curTimeText = isVaild? timeConfigs[curTimeIndex] : "Unknown";
+            OnTimeChanged?.Invoke(isVaild, curTimeText);
+        }
+
+        /// <summary>
+        /// 重置时间
+        /// </summary>
+        public void ResetTimeData()
+        {
+            curTimeIndex = 0;
+            if(timeConfigs.Count <= 0)
+            {
+                OnTimeChanged?.Invoke(false, "Unknown");
+                return;
+            }
+
+            OnTimeChanged?.Invoke(true, timeConfigs[curTimeIndex]);
+        }
 
         /// <summary>
         /// 序列化条件列表

@@ -78,6 +78,7 @@ namespace GGJ2026.Gameplay
 
         // 场景状态
         private string currentScene;
+        private string currentLevelScene;
         private string previousScene;
         private bool isTransitioning = false;
 
@@ -252,9 +253,12 @@ namespace GGJ2026.Gameplay
         /// <summary>
         /// 重新加载当前场景
         /// </summary>
-        public void ReloadCurrentScene()
+        public void ReloadCurrentLevelScene()
         {
-            LoadScene(currentScene);
+            if(string.IsNullOrEmpty(currentLevelScene) is false)
+            {
+                LoadScene(currentLevelScene);
+            }
         }
 
         /// <summary>
@@ -374,6 +378,14 @@ namespace GGJ2026.Gameplay
         }
 
         /// <summary>
+        /// 加载死亡场景
+        /// </summary>
+        public void LoadDeadScene()
+        {
+            LoadScene("GameDead");
+        }
+
+        /// <summary>
         /// 显示游戏结局（最终关卡完成）
         /// </summary>
         public void ShowGameEnding(bool isSuccess)
@@ -426,7 +438,7 @@ namespace GGJ2026.Gameplay
         /// <summary>
         /// 是否是最终关卡
         /// </summary>
-        public bool IsFinalLevel => IsLastScene(currentScene);
+        public bool IsFinalLevel => IsLastScene(currentLevelScene);
 
         /// <summary>
         /// 当前流程链名称
@@ -594,6 +606,12 @@ namespace GGJ2026.Gameplay
             // 更新场景记录
             previousScene = currentScene;
             currentScene = scene.name;
+            
+            if (currentFlowChain != null && 
+                currentFlowChain.ContainsScene(currentScene))
+            {
+                currentLevelScene = currentScene;
+            }
 
             if (debugMode)
             {

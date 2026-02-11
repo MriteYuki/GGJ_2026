@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using GGJ2026.Gameplay.Condition;
 using GGJ2026.Gameplay.ScriptableObjects;
+using GGJ2026.UI;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace GGJ2026.Gameplay
 {
@@ -309,7 +311,11 @@ namespace GGJ2026.Gameplay
                 {
                     falseText.Show();
                 }
-                //ResetLevel();
+
+                if (levelData)
+                {
+                    levelData.MoveTimeForward();
+                }
             }
         }
 
@@ -322,6 +328,18 @@ namespace GGJ2026.Gameplay
                 {
                     Debug.Log($"加载关卡数据: {levelData.name}");
                     Debug.Log(GetConditionStatusReport());
+                    levelData.OnTimeChanged = (hasNext, time) =>
+                    {
+                        if (hasNext is false)
+                        {
+                            GameManager.Instance.LoadDeadScene();
+                            return;
+                        }
+
+                        UIEventSystem.Instance.Publish(UIEventTypes.UI_TIME_UPDATE, time);
+                    };
+
+                    levelData.ResetTimeData();
                 }
             }
 

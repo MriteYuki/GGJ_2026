@@ -19,87 +19,78 @@ MonoBehaviour:
     enablePosition: 1
     enableRotation: 1
     enableScale: 1
-    checkPosition: {x: -6, y: 1.25}
-    checkRadius: 1
-    checkRotation: 0
-    checkScale: 2
+    checkPosition: 0
+    checkRotationList: 
+    checkScaleList: 
   - conditionType: 0
     targetFeatureId: 22
     targetFeatureType: 2
     enablePosition: 1
     enableRotation: 1
     enableScale: 1
-    checkPosition: {x: -2, y: 1.25}
-    checkRadius: 1
-    checkRotation: 0
-    checkScale: 2
+    checkPosition: 0
+    checkRotationList: 
+    checkScaleList: 
   - conditionType: 0
     targetFeatureId: 33
     targetFeatureType: 1
     enablePosition: 1
     enableRotation: 1
     enableScale: 1
-    checkPosition: {x: -4, y: 0.2}
-    checkRadius: 1
-    checkRotation: 0
-    checkScale: 2
+    checkPosition: 0
+    checkRotationList: 
+    checkScaleList: 
   - conditionType: 0
     targetFeatureId: 33
     targetFeatureType: 1
     enablePosition: 1
     enableRotation: 1
     enableScale: 1
-    checkPosition: {x: -4, y: 0.2}
-    checkRadius: 1
-    checkRotation: 0
-    checkScale: 2
+    checkPosition: 0
+    checkRotationList: 
+    checkScaleList: 
   - conditionType: 0
     targetFeatureId: 51
     targetFeatureType: 3
     enablePosition: 1
     enableRotation: 1
     enableScale: 1
-    checkPosition: {x: -4, y: 1.62}
-    checkRadius: 1
-    checkRotation: 0
-    checkScale: 1
+    checkPosition: 0
+    checkRotationList: 
+    checkScaleList: 
   - conditionType: 2
     targetFeatureId: 53
     targetFeatureType: 2
     enablePosition: 1
     enableRotation: 0
     enableScale: 0
-    checkPosition: {x: -4, y: 1.62}
-    checkRadius: 1
-    checkRotation: 0
-    checkScale: 1
+    checkPosition: 0
+    checkRotationList: 
+    checkScaleList: 
   - conditionType: 2
     targetFeatureId: 31
     targetFeatureType: 2
     enablePosition: 1
     enableRotation: 0
     enableScale: 0
-    checkPosition: {x: -4, y: -0.2}
-    checkRadius: 1
-    checkRotation: 0
-    checkScale: 1
+    checkPosition: 0
+    checkRotationList: 
+    checkScaleList: 
   - conditionType: 2
     targetFeatureId: 20
     targetFeatureType: 2
     enablePosition: 1
     enableRotation: 1
     enableScale: 1
-    checkPosition: {x: -6, y: 1.25}
-    checkRadius: 1
-    checkRotation: 0
-    checkScale: 2
+    checkPosition: 0
+    checkRotationList: 
+    checkScaleList: 
   - conditionType: 2
     targetFeatureId: 20
     targetFeatureType: 2
     enablePosition: 1
     enableRotation: 1
     enableScale: 1
-    checkPosition: {x: -2, y: 1.25}
-    checkRadius: 1
-    checkRotation: 0
-    checkScale: 2
+    checkPosition: 0
+    checkRotationList: 
+    checkScaleList: 

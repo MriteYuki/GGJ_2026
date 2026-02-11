@@ -19,67 +19,65 @@ MonoBehaviour:
     enablePosition: 1
     enableRotation: 0
     enableScale: 1
-    checkPosition: {x: -3.9, y: -0.2}
-    checkRadius: 1
-    checkRotation: 0
-    checkScale: 2
+    checkPosition: 0
+    checkRotationList: 
+    checkScaleList: 
   - conditionType: 0
     targetFeatureId: 53
     targetFeatureType: 2
     enablePosition: 1
     enableRotation: 1
     enableScale: 1
-    checkPosition: {x: -4, y: 1.62}
-    checkRadius: 1
-    checkRotation: 0
-    checkScale: 1
+    checkPosition: 0
+    checkRotationList: 
+    checkScaleList: 
   - conditionType: 1
     targetFeatureId: 53
     targetFeatureType: 1
     enablePosition: 1
     enableRotation: 1
     enableScale: 1
-    checkPosition: {x: -6, y: 1.25}
-    checkRadius: 1
-    checkRotation: 0
-    checkScale: 1
+    checkPosition: 0
+    checkRotationList: 
+    checkScaleList: 
   - conditionType: 1
     targetFeatureId: 53
     targetFeatureType: 1
     enablePosition: 1
     enableRotation: 1
     enableScale: 1
-    checkPosition: {x: -2.1, y: 1.25}
-    checkRadius: 1
-    checkRotation: 0
-    checkScale: 1
+    checkPosition: 0
+    checkRotationList: 
+    checkScaleList: 
   - conditionType: 1
     targetFeatureId: 53
     targetFeatureType: 3
     enablePosition: 1
     enableRotation: 1
     enableScale: 1
-    checkPosition: {x: -4, y: 0.87}
-    checkRadius: 1
-    checkRotation: 0
-    checkScale: 1
+    checkPosition: 0
+    checkRotationList: 
+    checkScaleList: 
   - conditionType: 2
     targetFeatureId: 30
     targetFeatureType: 2
     enablePosition: 1
     enableRotation: 0
     enableScale: 0
-    checkPosition: {x: -4, y: -0.2}
-    checkRadius: 1
-    checkRotation: 0
-    checkScale: 1
+    checkPosition: 0
+    checkRotationList: 
+    checkScaleList: 
   - conditionType: 2
     targetFeatureId: 50
     targetFeatureType: 2
     enablePosition: 1
     enableRotation: 0
     enableScale: 0
-    checkPosition: {x: -4, y: 1.62}
-    checkRadius: 1
-    checkRotation: 0
-    checkScale: 1
+    checkPosition: 0
+    checkRotationList: 
+    checkScaleList: 
+  timeConfigs:
+  - '8: 00 AM'
+  - '8: 10 AM'
+  - '8: 20 AM'
+  - '8: 30 AM'
